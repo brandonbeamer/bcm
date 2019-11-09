@@ -1,0 +1,43 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% load static %}
+
+{% block title_text %}Dashboard - Enroll{% endblock %}
+{% block topbar_text %}Dashboard - Enroll{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'dashboard/css/dashboard_base.css' %}"/>
+<link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
+{% endblock %}
+
+{% block main_content %}
+
+<h1>Enroll in a Course</h1>
+
+<p>Select a course to enroll in from the list below. Note that courses marked 'private'
+will require a password that your instructor can provide.</p>
+
+{% if course_list %}
+  <ul class="object-list">
+    {% for course in course_list %}
+      <li>
+        <div class="object-name">
+            <a href="{% url 'enroll' pk=course.id %}">{{ course.name }} ({{ course.code }})</a>
+        </div>
+        <div class="object-details">
+          {% if course.password %}
+            <span class="error-notice">Private</span>
+          {% else %}
+            <span class="notice">Public</span>
+          {% endif %}
+          | Created by {{ course.creator.get_full_name }} on {{ course.created_at }}
+        </div>
+
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>There are literally no open courses on BCM which you aren't a member of. Maybe you should <a href="{% url 'create_course' %}">make one</a>?</p>
+{% endif %}
+
+{% endblock %}

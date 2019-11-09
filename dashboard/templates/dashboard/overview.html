@@ -1,0 +1,51 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% load static %}
+
+{% block title_text %}Dashboard - Overview{% endblock %}
+{% block topbar_text %}Dashboard - Overview{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'dashboard/css/dashboard_base.css' %}">
+  <link rel="stylesheet" href="{% static 'dashboard/css/overview.css' %}">
+{% endblock %}
+
+{% block main_content %}
+
+  <section>
+    <h1>Courses</h1>
+    {% if course_list %}
+    <ul>
+      {% for course in course_list %}
+        <li>
+          <a href="{{ course.get_absolute_url }}">({{ course.code }}) {{course.name}}</a>
+        </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p>You are currently not a member of any course. You can create or enroll in one
+      by clicking on 'My Courses' above.</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h1>Gradables</h1>
+    <ul>
+      <li>Week 1 Homework - Introduction to Tying One's Shoes</li>
+      <li>Week 2 Homework - Introduction to Tying One's Shoes</li>
+      <li>Week 3 Homework - Introduction to Tying One's Shoes</li>
+      <li>Week 4 Homework - Introduction to Tying One's Shoes</li>
+      <li>Week 5 Homework - Introduction to Tying One's Shoes</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Evaluations</h1>
+    <ul>
+      <li>First Assignment: <span class="notice">89.9%</span></li>
+      <li>Second Assignment: <span class="notice">89.9%</span></li>
+    </ul>
+  </section>
+
+
+{% endblock %}

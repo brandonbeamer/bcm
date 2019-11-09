@@ -1,0 +1,32 @@
+{% if use_html %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <p>Hi {{first_name}},</p>
+
+    <p>Thanks for signing up to use Brandon's Course Manager (BCM). To complete your
+    registration, please click on the link below. If you can't click it, just
+    copy/paste it into your browser.</p>
+
+    <p><a href="{{verification_url}}">{{verification_url}}</a></p>
+
+    <p>Cheers!</p>
+
+    <p>Brandon</p>
+  </body>
+</html>
+
+{% else %}Hi {{first_name}},
+
+Thanks for signing up to use Brandon's Course Manager (BCM). To complete your
+registration, please copy/paste the link below into your browser.
+
+{{verification_url}}
+
+Cheers!
+
+Brandon
+{% endif %}

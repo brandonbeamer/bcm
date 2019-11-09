@@ -1,0 +1,263 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+:root {
+  --almost-white: #fefefe;
+  --almost-black: #010101;
+  --accent-color: #006644;
+  --accent-hl: #007D53;  /* hl = highlight */
+  --accent-ds: #2d4d43;  /* ds = desaturated, for backgrounds */
+  --accent-shl: #afcfc4; /* shl = soft highlight */
+  --red-text: #d00000;
+  --green-text: #008256;
+
+  --default-font-size: 12px; /* default for mobile */
+  --large-font-size: 15px;   /* larger for desktops */
+
+}
+
+body {
+  font-size: var(--default-font-size);
+  font-family: "Roboto", sans-serif;
+  background-color: var(--almost-white);
+  color: black;
+}
+
+button, input, select {
+  font-size: var(--default-font-size);
+  font-family: "Roboto", sans-serif;
+}
+
+footer p {
+  font-size: 70%;
+  margin: 0;
+  text-align: center;
+}
+
+.page {
+  width: 100%;
+}
+
+h1 {
+  font-size: 150%;
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+h2 {
+  font-size: 125%;
+  font-weight: bold;
+  margin-top: 1em;
+}
+
+h3 {
+  font-size: 100%;
+  font-weight: bold;
+  margin-top: 1em;
+}
+
+p {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+  line-height: 1.4em;
+}
+
+ul {
+  margin-bottom: 1em;
+  line-height: 1.4em;
+}
+
+li {
+  margin: 0.5em 0;
+}
+
+a {
+  text-decoration: none;
+  color: var(--green-text);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.form-line {
+  margin: 1em 0;
+}
+
+.form-line span {
+  display: inline-block;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  font-size: 90%;
+  margin-bottom: 0.2em;
+  margin-right: 0.2em;
+  /* font-variant: small-caps; */
+}
+
+input, select, textarea {
+  padding: 0.3em;
+  margin: 0.3em 0;
+}
+
+input, select {
+  background-color: var(--almost-white);
+}
+
+[type=text], [type=email], [type=password], [type=url] {
+  border: 0;
+  width: 20em;
+  border-bottom: 1px solid gray;
+}
+
+select {
+  border: 0;
+}
+
+textarea {
+  resize: none;
+  display: block;
+  width: 100%;
+  border: 1px solid lightgray;
+  border-radius: 0.25em;
+  padding: 0.3em;
+  margin: 0.3em 0;
+  background-color: white;
+}
+
+[type=checkbox] {
+  height: 1.2em;
+  width: 1.2em;
+  vertical-align: bottom;
+}
+
+button, [type=button], [type=submit] {
+  padding: 0.5em;
+  border: 0;
+  border-radius: 0.4em;
+  margin: 0.2em;
+}
+
+button, [type=button] {
+  background-color: hsl(0, 0%, 95%);
+  box-shadow: 0 -0.1em 0.1em var(--almost-black) inset;
+}
+
+button:hover, [type=button]:hover {
+  background-color: var(--accent-shl);
+}
+
+button:active, [type=button]:active {
+  background-color: var(--accent-shl);
+  box-shadow: 0 0.1em 0.1em var(--almost-black) inset;
+}
+
+
+[type=submit] {
+  background-color: var(--accent-color);
+  color: var(--almost-white);
+  font-weight: bold;
+}
+
+[type=submit]:hover {
+  box-shadow: 0 0 0.2em var(--accent-color);
+}
+
+.fancy-hr-ltr {
+  height: 2px;
+  width: 100%;
+  margin: 2px 0;
+  background: linear-gradient(to right, var(--accent-color), var(--almost-white));
+}
+
+.fancy-hr {
+  height: 2px;
+  width: 100%;
+  margin: 2px 0;
+  background: linear-gradient(to right, var(--almost-white), var(--accent-color), var(--almost-white));
+}
+
+.fancy-vr {
+  /* height: 100%; */
+  width: 2px;
+  background: linear-gradient(to bottom, var(--almost-white), var(--accent-color), var(--almost-white));
+}
+
+.icon {
+  height: 1.2em;
+  width: 1.2em;
+  vertical-align: bottom;
+}
+
+.clickable:hover {
+  cursor: pointer;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.block {
+  display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.help {
+  font-style: italic;
+  font-size: 90%;
+}
+
+.notice {
+  color: var(--green-text);
+  font-weight: bold;
+}
+
+.error-notice {
+  color: var(--red-text);
+  font-weight: bold;
+}
+
+.errorlist {
+  color: var(--red-text);
+  list-style: none;
+}
+
+.errorlist li:before {
+  content: '\00D7'; /* unicode: × */
+  margin: 0 0.5em;
+}
+
+.object-list {
+  list-style: none;
+  padding: 0;
+}
+
+.object-list li {
+  padding: 0.5em 0;
+  border-bottom: 1px dotted lightgray;
+}
+
+.object-list li:last-of-type {
+  border-bottom: 0;
+}
+
+.object-name {
+  font-weight: bold;
+}
+
+.object-details {
+  color: darkgray;
+  font-size: 90%;
+}
+
+.is-hidden {
+  display: none !important;
+}

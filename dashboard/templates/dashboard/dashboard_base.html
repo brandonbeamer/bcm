@@ -1,0 +1,47 @@
+{% extends 'shared/appview_base.html' %}
+{% load static %}
+
+{% block navbar_items %}
+  {% if view_name == 'overview' %}
+    <div>Overview</div>
+  {% else %}
+    <a href="{% url 'overview' %}">Overview</a>
+  {% endif %}
+
+  {% if view_name == 'profile' %}
+    <div>Profile</div>
+  {% else %}
+    <a href="{% url 'profile' %}">Profile</a>
+  {% endif %}
+
+  {% if view_name == 'my_courses' %}
+    <div>My Courses</div>
+  {% else %}
+    <a href="{% url 'my_courses' %}">My Courses</a>
+  {% endif %}
+
+  {% if view_name == 'account' %}
+    <div>Account</div>
+  {% else %}
+    <a href="{% url 'account' %}">Account</a>
+  {% endif %}
+{% endblock %}
+
+{% block navbar_drawer_items %}
+  {% if view_name != 'overview' %}
+    <a href="{% url 'overview' %}">Overview</a>
+  {% endif %}
+
+  {% if view_name != 'profile' %}
+    <a href="{% url 'profile' %}">Profile</a>
+  {% endif %}
+
+  {% if view_name != 'my_courses' %}
+    <a href="{% url 'my_courses' %}">My Courses</a>
+  {% endif %}
+
+  {% if view_name != 'account' %}
+    <a href="{% url 'account' %}">Account</a>
+  {% endif %}
+
+{% endblock %}

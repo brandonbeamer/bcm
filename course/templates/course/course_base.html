@@ -1,0 +1,51 @@
+{% extends 'shared/appview_base.html' %}
+{% load static %}
+
+{% block title_text %}{{course.name}} - {{view_name_pretty}}{% endblock %}
+{% block topbar_text %}{{course.name}} - {{view_name_pretty}}{% endblock %}
+
+
+{% block navbar_items %}
+  {% if view_name == 'course_items' %}
+    <div>Materials</div>
+  {% else %}
+    <a href="{% url 'course_items' pk=course.id %}">Materials</a>
+  {% endif %}
+
+  {% if view_name == 'course_assignments' %}
+    <div>Assignments</div>
+  {% else %}
+    <a href="{% url 'course_assignments' pk=course.id %}">Assignments</a>
+  {% endif %}
+
+  {% if view_name == 'course_gradebook' %}
+    <div>Gradebook</div>
+  {% else %}
+    <a href="{% url 'course_gradebook' pk=course.id %}">Gradebook</a>
+  {% endif %}
+
+  {% if view_name == 'course_settings' %}
+    <div>Course Settings</div>
+  {% else %}
+    <a href="{% url 'course_settings' pk=course.id %}">Course Settings</a>
+  {% endif %}
+{% endblock %}
+
+{% block navbar_drawer_items %}
+  {% if view_name != 'course_items' %}
+    <a href="{% url 'course_items' pk=course.id %}">Materials</a>
+  {% endif %}
+
+  {% if view_name != 'course_assignments' %}
+    <a href="{% url 'course_assignments' pk=course.id %}">Assignments</a>
+  {% endif %}
+
+  {% if view_name != 'course_gradebook' %}
+    <a href="{% url 'course_gradebook' pk=course.id %}">Gradebook</a>
+  {% endif %}
+
+  {% if view_name != 'course_settings' %}
+    <a href="{% url 'course_settings' pk=course.id %}">Course Settings</a>
+  {% endif %}
+
+{% endblock %}

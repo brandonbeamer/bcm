@@ -1,0 +1,58 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title_text %}Dashboard - Profile{% endblock %}
+{% block topbar_text %}Dashboard - Profile{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'dashboard/css/dashboard_base.css' %}"/>
+<link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
+
+{% endblock %}
+
+{% block main_content %}
+
+<h1>Profile</h1>
+
+{% if success %}
+<p class="notice">Profile details successfully saved.</p>
+{% endif %}
+
+<p>Update your profile details below.</p>
+
+<form action="{% url 'profile' %}" method="post">
+  {% csrf_token %}
+
+  {{ form.non_field_errors }}
+
+  <div class="form-line">
+    <label for="{{ form.nickname.id_for_label }}">Nickname:
+      <img class="icon drawer-toggle clickable" data-drawer-id="nickname_help" src="{% static 'shared/icons/help.svg' %}" alt="question mark icon">
+    </label>
+    <div class="drawer help" data-drawer-id="nickname_help">
+      {{ form.nickname.help_text }}
+    </div>
+    {% render_field form.nickname %}
+    {{ form.nickname.errors }}
+  </div>
+
+  <div class="form-line">
+    <label for="{{ form.institution_id.id_for_label }}">Institution ID:
+      <img class="icon drawer-toggle clickable" data-drawer-id="inst_id_help" src="{% static 'shared/icons/help.svg' %}" alt="question mark icon">
+    </label>
+    <div class="drawer help" data-drawer-id="inst_id_help">
+      {{ form.institution_id.help_text }}
+    </div>
+    {% render_field form.institution_id %}
+    {{ form.institution_id.errors }}
+  </div>
+
+  <div class="form-line">
+    <input type="submit" name="submit" value="Save Profile"/>
+  </div>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,113 @@
+/* appview.css */
+/* Defines the styles for the header, which is common to all app-style pages */
+/* as well as layouts accessible by setting a .lo-* class on the .page element */
+
+@media only screen and (min-width: 1000px) {
+  body {
+    font-size: var(--large-font-size);
+  }
+
+  button, input, select, textarea {
+    font-size: var(--large-font-size);
+  }
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em;
+  width: 100%;
+
+  background-color: var(--accent-color);
+  color: var(--almost-white);
+  box-shadow: 0 0 0.2em black;
+}
+
+.topbar a {
+  text-decoration: none;
+  color: var(--almost-white);
+}
+
+.topbar a:hover {
+  text-decoration: underline;
+}
+
+.topbar .title {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  padding: 0 0.5em;
+  /* padding-left: 0.5em solid var(--accent-color);
+  padding-right: 0.5em solid var(--accent-color); */
+}
+
+.topbar .profile {
+  white-space: nowrap;
+}
+
+.navbar-condensed {
+  cursor:pointer;
+}
+
+header nav {
+  color: black;
+  font-size: 120%;
+}
+
+nav a, nav div {
+  padding: 1em;
+}
+
+nav a {
+  text-decoration: none;
+  color: lightgray;
+}
+
+.navbar-popup {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+}
+
+.navbar-popup a {
+  color: darkgray;
+}
+
+header {
+  width: 100%;
+}
+
+footer {
+  width: 100%;
+  font-size: 80%;
+  text-align: center;
+}
+
+section {
+  padding: 1em;
+}
+
+ul.container {
+  list-style: none;
+}
+
+[type='button'] {
+  font-weight: bold;
+  background-color: lightgray;
+}
+
+button.accent {
+  background-color: var(--accent-color);
+  color: var(--almost-white);
+}
+
+button.accent:hover {
+  background-color: var(--accent-hl);
+}
+
+/* Layout specifics */
+
+/* One-column Layout */
+
+/*  */

@@ -1,0 +1,27 @@
+/* styles for the simplest, top-down layouts */
+
+/* in this layout, the .page is the a content item, rather than container */
+
+.page {
+  width: 100%;
+  padding: 1em;
+  margin: auto;
+}
+
+@media only screen and (min-width: 540px) {
+  body {
+    background-color: var(--accent-ds);
+    padding: 1em;
+  }
+  .page {
+    width: 43em;
+    background-color: var(--almost-white);
+    border-radius: 1em;
+  }
+}
+
+@media only screen and (min-width: 675px) {
+  body, input {
+    font-size: var(--large-font-size);
+  }
+}

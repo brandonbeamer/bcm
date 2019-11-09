@@ -1,0 +1,17 @@
+{% extends 'manager/simple_base.html' %}
+{% load static %}
+
+{% block title %}BCM - Verification Sent{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'manager/css/signup.css' %}">
+{% endblock %}
+
+{% block content %}
+      <h1>Verification Email Sent</h1>
+      <div class="fancy-hr"></div>
+
+      <p>We just sent a verification email to {{email}}.
+        Please click on the link inside to complete the sign-up process.
+      </p>
+{% endblock %}

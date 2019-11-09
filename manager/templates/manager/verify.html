@@ -1,0 +1,43 @@
+{% extends 'manager/simple_base.html' %}
+
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'manager/css/signup.css' %}">
+{% endblock%}
+
+{% block content %}
+
+  {% if status == 'success' %}
+
+    <h1>Email Verification Succeeded!</h1>
+    <div class="fancy-hr"></div>
+    <p>Congratulations {{first_name}}, you are now ready to use BCM! Feel to
+    head on over to the <a href="{% url 'login' %}">login page</a> and get started.</p>
+
+    <p>Enjoy!</p>
+
+    <p>Brandon</p>
+
+  {% else %}
+    {% if status == 'already_verified' %}
+
+    <h1>Email Already Verified</h1>
+    <div class="fancy-hr"></div>
+
+    <p>You've already verified your email address. Please proceed to the
+    <a href="{% url 'login' %}">login page</a>.</p>
+
+
+    {% else %}
+
+      <h1>Email Verification Failed</h1>
+      <div class="fancy-hr"></div>
+
+      <p>It looks like you're trying to verify an email address with BCM, but the
+      code isn't right. Make sure you've correctly copy/pasted the link.</p>
+
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

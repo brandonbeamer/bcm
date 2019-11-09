@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCM - {% block title_text %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'shared/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'shared/css/appview.css' %}">
+    <script src="{% static 'shared/js/bcm.js' %}" defer></script>
+    <script src="{% static 'shared/js/drawer.js' %}" defer></script>
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <div class="page container">
+
+      <header class="container">
+        <div class="topbar container">
+          <div class="bcm-link">
+            <a href="{% url 'overview' %}">BCM</a>
+          </div>
+          <div class="title">{% block topbar_text %}{% endblock %}</div>
+          <div class="profile">Brandon <a href="{% url 'logout' %}"><img class="icon" src="{% static 'shared/icons/power-white.svg' %}" alt="logout button"></a></div>
+        </div>
+        <nav class="navbar container">
+          {% block navbar_items %}{% endblock %}
+        </nav>
+        <nav class="navbar-condensed container drawer-toggle" data-drawer-id="navbar">
+          <div>{{ view_name_pretty }}</div>
+          <img class="drawer-collapsed-only icon" src="{% static 'shared/icons/expand_more.svg' %}" alt="navbar expand button"/>
+          <img class="drawer-expanded-only icon" src="{% static 'shared/icons/expand_less.svg' %}" alt="navbar condense button"/>
+        </nav>
+        <nav class="navbar-popup container drawer" data-drawer-id="navbar">
+          {% block navbar_drawer_items %}{% endblock %}
+        </nav>
+        <div class="fancy-hr horiz"></div>
+      </header>
+
+      <main>
+        {% block main_content %}{% endblock %}
+      </main>
+
+
+
+      <footer>
+        <div class="fancy-hr horiz"></div>
+        Copyright &copy; 2019 Brandon Beamer<br/>Pretty much all websites use cookies, including this one.
+      </footer>
+
+    </div>
+  </body>
+</html>

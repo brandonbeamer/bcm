@@ -1,0 +1,47 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% load static %}
+
+{% block title_text %}Dashboard - My Courses{% endblock %}
+{% block topbar_text %}Dashboard - My Courses{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'dashboard/css/dashboard_base.css' %}"/>
+<link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
+
+{% endblock %}
+
+{% block main_content %}
+
+<h1>My Courses</h1>
+
+<div class="align-right">
+  <button onclick="window.location.href = '{% url 'find_course' %}'">Enroll</button>
+  <button class="accent" onclick="window.location.href = '{% url 'create_course' %}'"><img class="icon" src="{% static 'shared/icons/add_white.svg' %}" alt="plus sign"> Create Course</button>
+</div>
+
+{% if course_list %}
+  <ul class="object-list">
+    {% for course in course_list %}
+      <li>
+        <div class="object-name">
+            <a href="{{ course.get_absolute_url }}">{{ course.name }} ({{ course.code }})</a>
+        </div>
+        <div class="object-details">
+           Status: {% if course.open %}
+            <span class="notice">Open</span>
+            {% else %}
+            <span class="error-notice">Closed</span>
+            {% endif %}
+          | Created: {{ course.created_at }}
+        </div>
+
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>You are not currently enrolled in any courses. Find a course my clicking on
+  'enroll' or 'create' above.</p>
+{% endif %}
+
+{% endblock %}

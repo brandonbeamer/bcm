@@ -1,0 +1,49 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title_text %}Dashboard - Enroll{% endblock %}
+{% block topbar_text %}Dashboard - Enroll in {{course.name}}!{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'dashboard/css/dashboard_base.css' %}"/>
+<link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
+{% endblock %}
+
+{% block main_content %}
+
+<h1>Enroll in a Course</h1>
+  {% if already_enrolled %}
+    <p>You are already a member of &ldquo;{{course.name}}&rdquo;. You can
+    <a href="{% url 'course_items' pk=course.id %}">view the course</a> right now if you like.</p>
+  {% else %}
+    {% if success %}
+      <p>Congratulations! You are now a member of &ldquo;{{course.name}}&rdquo;. You can
+        <a href="{% url 'course_items' pk=course.id %}">view the course</a> right now if you like.</p>
+    {% else %}
+      <form action="{% url 'enroll' pk=course.id %}" method="post">
+        {% csrf_token %}
+
+        {% if course.password %}
+          <p>&ldquo;{{ course.name }}&rdquo; requires a password to enroll. Please provide it below.</p>
+          <div class="form-line">
+            <label for="{{ form.password.id_for_label }}">Password:</label>
+            {% render_field form.password required='' %}
+            {{ form.password.errors }}
+          </div>
+        {% else %}
+          <p>&ldquo;{{course.name}}&rdquo; is a public course. Simply click on &lsquo;Enroll&lsquo; below
+          to complete the enrollment process.</p>
+
+          <input type="hidden" name="password" value=""/>
+        {% endif %}
+
+        <div class="form-line align-right">
+          <input type="submit" name="" value="Enroll"/>
+        </div>
+      </form>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

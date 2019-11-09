@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'shared/css/base.css' %}"/>
+    <link rel="stylesheet" href="{% static 'shared/css/simple_layout.css' %}"/>
+
+    {% block head %}{% endblock %}
+
+  </head>
+  <body>
+    <div class="page">
+
+      {% block content %}{% endblock %}
+
+      <footer>
+        <p>Copyright &copy; 2019 Brandon Beamer</p>
+        <p>Every website uses cookies.</p>
+      </footer>
+
+    </div>
+  </body>
+</html>

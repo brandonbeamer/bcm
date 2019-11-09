@@ -1,0 +1,100 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi"/>
+
+    <title>BCM - Login</title>
+    <link rel="stylesheet" href="{% static 'shared/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'manager/css/login.css' %}">
+  </head>
+  <body>
+    <div class="page">
+        <!-- <header>
+          No header for login/sign-up
+        </header> -->
+        <section class="login-sidebar">
+          <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <h1>Login to BCM</h1>
+            <p class="align-right">&hellip; or <a href="{% url 'signup' %}">create an account</a></p>
+            <div class="form-line">
+              <label for="{{ form.username.id_for_label}}">Username:</label>
+              {% render_field form.username autofocus='' placeholder='Username' %}
+              {{ form.username.errors }}
+            </div>
+
+            <div class="form-line">
+              <label for="{{form.password.id_for_label}}">Password:</label>
+              {% render_field form.password placeholder='Password' %}
+              {{ form.password.errors }}
+            </div>
+
+            <div class="form-line align-right">
+              <input type="submit" name="" value="Login"/>
+            </div>
+
+          </form>
+        </section>
+        <section class="login-main">
+          <div class="login-main-content">
+
+
+            <div class="login-title">BCM</div>
+            <div class="login-subtitle">Brandon's Course Manager</div>
+
+
+
+            <h1>Heading 1</h1>
+            <p>
+              <a href="#">Export id litteris iis</a> quem. Aute mandaremus singulis in expetendis nam nostrud,
+              a quo noster proident et laboris quis a nescius instituendarum. Constias nulla
+              irure id quis.Incurreret non sint cupidatat, aute te hic dolor incurreret,
+              aliquip legam culpa commodo illum e constias export cillum aut fore te quo quis
+              quae quorum deserunt an sed o dolore mentitum, culpa ita offendit iis labore,
+              quo culpa mentitum. Laboris sunt se nostrud eruditionem, e tamen aliqua sed
+              aliquip id officia qui aliqua voluptate, esse proident mentitum. Laborum id
+              ullamco quo non sed firmissimum.
+            </p>
+
+            <h2>Heading 2</h2>
+            <p>
+              Quamquam nulla export admodum quis, senserit duis mandaremus. Esse sed
+              mandaremus quo quem, se tamen efflorescere. Quibusdam sempiternum si singulis a
+              dolore expetendis ubi exercitation, fabulas ita malis, ne ab quis occaecat.
+              Expetendis legam mandaremus quibusdam, litteris consectetur non incididunt.Fore
+              ingeniis reprehenderit iis an dolor est aute ab quorum domesticarum voluptate
+              amet probant o et elit et noster te laboris anim dolore ita illum, dolore
+              officia ubi culpa amet a nescius dolore consequat nam ea id graviterque. Iis
+              aute distinguantur, deserunt ne cillum ullamco, et nulla se nulla hic fugiat do
+              an irure vidisse. Ita magna officia, expetendis cillum proident. Vidisse aliqua
+              culpa iudicem aliqua, ingeniis eram cernantur vidisse, laborum in constias ubi
+              dolore ne offendit, consequat magna cernantur iudicem an eiusmod nulla o
+              occaecat domesticarum ubi occaecat illum offendit nam iis veniam quamquam.
+            </p>
+            <h3>Heading 3</h3>
+            <p>
+              E laborum tractavissent, tempor coniunctione consequat anim aliquip e illum
+              iudicem qui quid duis ex esse offendit firmissimum. Quo occaecat philosophari,
+              elit appellat sempiternum, dolore eiusmod deserunt ita consequat iis deserunt,
+              veniam et admodum ubi cillum ubi summis ab ita aliqua laborum in amet deserunt
+              doctrina ubi aut sint senserit tractavissent. Quorum imitarentur laborum dolor
+              iudicem ubi cillum aut laboris eu tempor probant consequat, legam familiaritatem
+              possumus quis expetendis est nisi ullamco ad eruditionem an non labore
+              eruditionem de ut iudicem efflorescere est illum laborum fabulas.Multos probant
+              adipisicing. Mandaremus multos ne occaecat familiaritatem, laborum ita veniam,
+              ex culpa deserunt despicationes, malis distinguantur consequat noster litteris.
+              Ne singulis reprehenderit. Noster excepteur cernantur ubi te sed cohaerescant.
+            </p>
+          </div>
+          <footer>
+            <p>Copyright &copy; 2019 - Brandon Beamer</p>
+            <p>Every website uses cookies.</p>
+          </footer>
+        </section>
+    </div>
+  </body>
+</html>

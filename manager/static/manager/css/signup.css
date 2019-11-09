@@ -1,0 +1,35 @@
+[type=text], [type=password], [type=email] {
+  width: 20em;
+  display: block;
+}
+
+@media only screen and (min-width: 510px) {
+  [type=text], [type=password], [type=email] {
+    display: inline-block;
+  }
+}
+
+[type=text], [type=password], [type=email] {
+  width: 20em;
+}
+
+
+.errorlist {
+  display: inline-block;
+  width: 20em;
+  padding-left: 1.6em;
+  text-indent: -1.6em;
+  vertical-align: top;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media only screen and (min-width: 510px) {
+  form {
+    align-items: flex-start;
+  }
+}

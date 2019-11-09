@@ -1,0 +1,53 @@
+@media only screen and (min-width: 450px) {
+  .navbar-condensed {
+    display: none;
+  }
+
+  .navbar {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 449px) {
+  .navbar-condensed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .navbar {
+    display: none;
+  }
+}
+
+.course-item {
+  /* Container with three children: icon, name, details */
+  display: grid;
+  grid:
+    "a b d"
+    "a c d"
+    / min-content auto min-content;
+}
+
+.course-item .object-icon {
+  grid-area: a;
+  margin-right: 1em;
+  width: 2em;
+  height: 2em;
+}
+
+.course-item .object-name {
+  grid-area: b;
+}
+
+.course-item .object-details {
+  grid-area: c;
+}
+
+.course-item .object-popup {
+  grid-area: d;
+  margin-left: 1em;
+  width: 1.2em;
+  height: 1.2em;
+}

@@ -1,0 +1,35 @@
+.object-popup {
+  /* relative positioned wrapper for containing menu */
+  position: relative;
+}
+
+ul.popup-menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+
+  list-style: none;
+  padding: 0.2em;
+  margin: 0;
+  background-color: var(--almost-white);
+  box-shadow: 0 0 0.3em gray;
+}
+
+ul.popup-menu li {
+  white-space: nowrap;
+  border: 0;
+  margin: 0;
+  padding: 0.5em;
+}
+
+ul.popup-menu li:hover {
+  color: var(--almost-white);
+  background-color: var(--accent-color);
+}
+
+ul.popup-menu .popup-menu-divider {
+  height: 1px;
+  border-bottom: 1px solid lightgray;
+  margin: 0.2em 0;
+}
