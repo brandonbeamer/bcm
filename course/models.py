@@ -38,7 +38,7 @@ class Course(models.Model):
         through_fields = ('course', 'user'))
 
     def get_absolute_url(self):
-        return reverse('course_items', args = [self.id])
+        return reverse('course_item_list', args = [self.id])
 
     def __str__(self):
         return f"{self.id}:{self.code}"
@@ -90,35 +90,59 @@ class Attendance(models.Model):
     def __str__(self):
         return f"{self.user}'s was {self.status}"
 
-class ItemCategory(models.Model):
-    """ Category of Course Items """
-    ASSIGNMENT = 'A'
-    GENERAL = 'G'
-    TYPE_CHOICES = [(ASSIGNMENT, 'Assignment'), (GENERAL, 'General')]
-    type = models.CharField(max_length = 1, choices = TYPE_CHOICES)
-    course = models.ForeignKey(Course, on_delete = models.CASCADE)
-    name   = models.CharField(max_length = 30)
-    order  = models.SmallIntegerField()
-    class Meta:
-        ordering = ['course', 'type', 'order', 'name']
-        constraints = [
-            models.UniqueConstraint(fields = ['course', 'type', 'order'], name = 'unique_item_categories')
-        ]
-    def __str__(self):
-        return f"{self.name}"
+# class ItemCategory(models.Model):
+#     """ Category of Course Items """
+#     ASSIGNMENT = 'A'
+#     GENERAL = 'G'
+#     TYPE_CHOICES = [(ASSIGNMENT, 'Assignment'), (GENERAL, 'General')]
+#     type = models.CharField(max_length = 1, choices = TYPE_CHOICES)
+#     course = models.ForeignKey(Course, on_delete = models.CASCADE)
+#     name   = models.CharField(max_length = 30)
+#     # order  = models.SmallIntegerField()
+#     class Meta:
+#         ordering = ['course', 'type', 'name']
+#         # constraints = [
+#         #     models.UniqueConstraint(fields = ['course', 'type', 'order'], name = 'unique_item_categories')
+#         # ]
+#     # def __repr__(self):
+#     #     return f"{self.id}:{self.name}"
+#
+#     def __str__(self):
+#         return f"{self.name}"
 
-class ModelWithContent(models.Model):
-    """ Abstract model for representing the content (online-viewable) part of things that have it """
-    URL = 'U'
-    PLAINTEXT = 'P'
-    MARKDOWN  = 'M'
-    CONTENT_TYPE_CHOICES = [
-        (URL, 'URL'),
-        (PLAINTEXT, 'Plain Text'),
-        (MARKDOWN, 'Markdown-formatted Text')
+ITEMHEADING_TYPE_ASSIGNMENT = 'A'
+ITEMHEADING_TYPE_GENERAL = 'G'
+class ItemHeading(models.Model):
+    """ Headings that appear on course item pages """
+    TYPE_CHOICES = [
+        (ITEMHEADING_TYPE_GENERAL, 'General'),
+        (ITEMHEADING_TYPE_ASSIGNMENT, 'Assignment'),
     ]
 
-    content_type = models.CharField(max_length = 1, default = MARKDOWN,
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    type = models.CharField(max_length = 1, choices = TYPE_CHOICES, default = ITEMHEADING_TYPE_GENERAL)
+    order = models.SmallIntegerField(default = 0)
+    name = models.CharField(max_length = 30)
+
+    def is_heading(self):
+        return true
+
+    class Meta:
+        ordering = ['course', 'type', 'order', 'name']
+
+
+COURSEITEM_CONTENT_TYPE_URL = 'U'
+COURSEITEM_CONTENT_TYPE_PLAINTEXT = 'U'
+COURSEITEM_CONTENT_TYPE_MARKDOWN = 'U'
+class ModelWithContent(models.Model):
+    """ Abstract model for representing the content (online-viewable) part of things that have it """
+    CONTENT_TYPE_CHOICES = [
+        (COURSEITEM_CONTENT_TYPE_URL, 'URL'),
+        (COURSEITEM_CONTENT_TYPE_PLAINTEXT, 'Plain Text'),
+        (COURSEITEM_CONTENT_TYPE_MARKDOWN, 'Markdown-formatted Text')
+    ]
+
+    content_type = models.CharField(max_length = 1, default = COURSEITEM_CONTENT_TYPE_MARKDOWN,
         choices = CONTENT_TYPE_CHOICES)
     url_content = models.URLField(blank = True, max_length = 200)
     text_content = models.TextField(blank = True)
@@ -132,15 +156,13 @@ class CourseItem(ModelWithContent):
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     name = models.CharField(max_length = 50, help_text = "The name or title of the course item")
     description = models.CharField(max_length = 300, blank = True, help_text = "A short description of the course item")
-    category = models.ForeignKey(ItemCategory, blank = True, null = True, on_delete = models.SET_NULL,
-        help_text = "The category or heading that this item will apear under. Leave blank to simply appear at the top.")
     visible = models.BooleanField(default = True, help_text = "Whether students can see the course item")
+    order = models.SmallIntegerField(default = 0)
 
     # All the content-related stuff is inherited
 
     class Meta:
         abstract = True
-        ordering = ['course', 'name']
 
     def __str__(self):
         return self.name
@@ -148,11 +170,14 @@ class CourseItem(ModelWithContent):
 class GeneralCourseItem(CourseItem):
     # No other fields for a general item
     def get_absolute_url(self):
-        return reverse('view_courseitem', kwargs={
-            'pk': self.course.id,
+        return reverse('course_item_detail', kwargs={
+            'course_id': self.course.id,
             'item_id': self.id
         })
-    pass
+
+    class Meta:
+        ordering = ['course', 'order', 'name']
+        pass
 
 
 class Assignment(CourseItem):

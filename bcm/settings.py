@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'rest_framework',
     'widget_tweaks',
     'manager',
     'course',
     'dashboard',
+    # 'api',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +133,7 @@ EMAIL_PORT = cfg['smtp']['EMAIL_PORT']
 EMAIL_HOST_USER = cfg['smtp']['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = cfg['smtp']['EMAIL_HOST_PASSWORD']
 EMAIL_USE_SSL = cfg['smtp']['EMAIL_USE_SSL']
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
+}

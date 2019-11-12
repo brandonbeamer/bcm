@@ -1,0 +1,86 @@
+{% extends 'course/course_base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'course/css/course_base.css' %}"/>
+  <link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
+  {# <link rel="stylesheet" href="{% static 'shared/css/switch.css' %}"/> #}
+  <script src="{% static 'shared/js/bcm.js' %}" defer></script>
+  <script src="{% static 'course/js/course_item_create.js' %}" defer></script>
+{% endblock %}
+
+{% block main_content %}
+
+<h1>Create Course Item</h1>
+
+<form action="{% url 'course_item_create' course_id=course.id %}" method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+
+  <div style="display:flex; flex-wrap: wrap">
+
+    <div class="form-line" style="margin-right: 1em">
+      <label for="{{form.name.id_for_label}}">Name:
+        {% with drawer_id=form.name.id_for_label %}
+          {% include 'shared/include/help_icon.html' %}
+        {% endwith%}
+      </label>
+      <div class="drawer help" data-drawer-id="{{form.name.id_for_label}}">
+        {{form.name.help_text}}
+      </div>
+      {% render_field form.name %}
+      {{ form.name.errors }}
+    </div>
+
+    <div class="form-line">
+      <label for="{{form.visible.id_for_label}}">Visible by Students:
+        {% with drawer_id=form.visible.id_for_label %}
+          {% include 'shared/include/help_icon.html' %}
+        {% endwith%}</label>
+      <div class="drawer help" data-drawer-id="{{form.visible.id_for_label}}">
+        {{form.visible.help_text}}
+      </div>
+      {% render_field form.visible %}
+      {{ form.visible.errors }}
+    </div>
+  </div>
+
+  <div class="form-line">
+    <label for="{{form.description.id_for_label}}">Description:
+      {% with drawer_id=form.description.id_for_label %}
+        {% include 'shared/include/help_icon.html' %}
+      {% endwith%}</label>
+      <div class="drawer help" data-drawer-id="{{form.description.id_for_label}}">
+        {{form.description.help_text}}
+      </div>
+    {% render_field form.description style="width: 100%" %}
+    {{ form.description.errors }}
+  </div>
+
+  <div class="form-line">
+    <label for="{{form.content_type.id_for_label}}">Type:</label>
+    {% render_field form.content_type %}
+    {{ form.content_type.errors }}
+  </div>
+
+  <div class="form-line _url_content">
+    <label for="{{form.url_content.id_for_label}}">URL:</label>
+    {% render_field form.url_content %}
+    {{ form.url_content.errors }}
+  </div>
+
+  <div class="form-line _text_content">
+    <label for="{{form.text_content.id_for_label}}">Item Content:</label>
+    {% render_field form.text_content %}
+    {{ form.text_content.errors }}
+  </div>
+
+  <div class="form-line align-right">
+    <input type="submit" value="Create Course Item"/>
+    <button onclick="window.location.href = '{% url 'course_item_list' course_id=course.id %}'">Cancel</button>
+  </div>
+
+</form>
+{% endblock %}

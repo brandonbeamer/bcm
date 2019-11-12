@@ -19,17 +19,17 @@ class AttendanceAdmin(admin.ModelAdmin):
     list_display = ['rollcall', 'user', 'status']
 
 
-@admin.register(models.ItemCategory)
-class ItemCategoryAdmin(admin.ModelAdmin):
+@admin.register(models.ItemHeading)
+class ItemHeadingAdmin(admin.ModelAdmin):
     list_display = ['course', 'type', 'order', 'name']
 
 @admin.register(models.GeneralCourseItem)
 class GeneralCourseItemAdmin(admin.ModelAdmin):
-    list_display = ['course', 'category', 'name', 'visible']
+    list_display = ['course', 'name', 'visible']
 
 @admin.register(models.Assignment)
 class AssignmentAdmin(admin.ModelAdmin):
-    list_display = ['course', 'category', 'name', 'visible', 'open', 'due_at', 'closes_at']
+    list_display = ['course', 'name', 'visible', 'open', 'due_at', 'closes_at']
 
 @admin.register(models.Submission)
 class SubmissionAdmin(admin.ModelAdmin):

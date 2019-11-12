@@ -1,0 +1,13 @@
+{# The item list portion of course_item_list.html #}
+{# Context should have 'item_list' set to a list of items #}
+
+
+{% for item in item_list %}
+  {% if item.is_heading %}
+    <h2>{{item.name}}</h2>
+  {% else %}
+    {% include 'course/course_item_list/course_item.html' %}
+  {% endif %}
+{% empty %}
+  <p>There are no course items.</p>
+{% endfor %}

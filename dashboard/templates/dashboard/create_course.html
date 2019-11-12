@@ -20,24 +20,24 @@
     {% endif %}
     {% csrf_token %}
     <div class="form-line">
-      <label for="{{form.name.id_for_label}}">Name: <img class="icon drawer-toggle clickable" data-drawer-id="name_help" src="{% static 'shared/icons/help.svg' %}" alt="question mark icon"> </label>
-      <div class="drawer help" data-drawer-id="name_help">
+      <label for="{{form.name.id_for_label}}">Name: {% with drawer_id=form.name.id_for_label %}{% include 'shared/include/help_icon.html' %}{% endwith %} </label>
+      <div class="drawer help" data-drawer-id="{{form.name.id_for_label}}">
         {{form.name.help_text}}
       </div>
       {% render_field form.name style="width: 100%" %}
       {{ form.name.errors }}
     </div>
     <div class="form-line">
-      <label for="{{form.code.id_for_label}}">Code: <img class="icon drawer-toggle clickable" data-drawer-id="code_help" src="{% static 'shared/icons/help.svg' %}" alt="question mark icon"> </label>
-      <div class="drawer help" data-drawer-id="code_help">
+      <label for="{{form.code.id_for_label}}">Code: {% with drawer_id=form.code.id_for_label %}{% include 'shared/include/help_icon.html' %}{% endwith %} </label>
+      <div class="drawer help" data-drawer-id="{{form.code.id_for_label}}">
         {{form.code.help_text}}
       </div>
       {% render_field form.code %}
       {{ form.code.errors }}
     </div>
     <div class="form-line">
-      <label for="{{form.password.id_for_label}}">Password: <img class="icon drawer-toggle clickable" data-drawer-id="pass_help" src="{% static 'shared/icons/help.svg' %}" alt="question mark icon"> </label>
-      <div class="drawer help" data-drawer-id="pass_help">
+      <label for="{{form.password.id_for_label}}">Password: {% with drawer_id=form.password.id_for_label %}{% include 'shared/include/help_icon.html' %}{% endwith %} </label>
+      <div class="drawer help" data-drawer-id="{{form.password.id_for_label}}">
         {{form.password.help_text}}
       </div>
       {% render_field form.password %}

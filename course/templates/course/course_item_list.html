@@ -1,0 +1,40 @@
+{% extends 'course/course_base.html' %}
+
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'course/css/course_base.css' %}"/>
+  <link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
+  <link rel="stylesheet" href="{% static 'shared/css/popup_menu.css' %}"/>
+
+  <script src="{% static 'shared/js/bcm.js' %}" defer></script>
+  <script src="{% static 'shared/js/popupmenu.js' %}" defer></script>
+  <script src="{% static 'course/js/course_item_list.js' %}" defer></script>
+
+{% endblock %}
+
+{% block main_content %}
+
+<div id="BCM-GLOBALS"
+  data-course-id="{{course.id}}">
+</div>
+
+<h1>Course Materials</h1>
+<div class="align-right api-status"></div>
+
+
+
+{% if is_instructor %}
+  <div class="align-right">
+    <button class='accent' onclick="window.location.href='{% url 'course_item_create' course_id=course.id%}'">
+      <img class='icon' src="{% static 'shared/icons/add_white.svg' %}" alt="plus sign"/>
+      Add Item
+    </button>
+    <button onclick="BCM.CourseItemList.addHeading">Add Heading</button>
+  </div>
+
+{% endif %}
+
+{% include 'course/course_item_list/object_list.html' %}
+
+{% endblock %}

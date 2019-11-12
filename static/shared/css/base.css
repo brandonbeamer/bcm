@@ -162,11 +162,17 @@ button:active, [type=button]:active {
   background-color: var(--accent-color);
   color: var(--almost-white);
   font-weight: bold;
+  box-shadow: 0 -0.1em 0.1em var(--almost-black) inset;
 }
 
 [type=submit]:hover {
-  box-shadow: 0 0 0.2em var(--accent-color);
+  background-color: var(--accent-hl);
 }
+
+[type=submit]:active {
+  box-shadow: 0 0.1em 0.1em var(--almost-black) inset;
+}
+
 
 .fancy-hr-ltr {
   height: 2px;
@@ -213,6 +219,23 @@ button:active, [type=button]:active {
 .help {
   font-style: italic;
   font-size: 90%;
+}
+
+.api-status {
+  height: 1.5em;
+  vertical-align: middle;
+}
+
+.api-status-good {
+  color: var(--green-text);
+}
+
+.api-status-bad {
+  color: var(--red-text);
+}
+
+.api-status-wait {
+  color: orange;
 }
 
 .notice {
