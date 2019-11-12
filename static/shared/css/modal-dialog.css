@@ -1,0 +1,28 @@
+/* Styles for BCM.ModalDialog Boxes */
+
+.modal-dialog-container {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #00000080;
+  display: grid;
+  grid:
+    ". . ." 1fr
+    ". a ." min-content
+    ". . ." 1fr
+     / 1fr min-content 1fr;
+}
+
+.modal-dialog-box {
+  grid-area: a;
+  background-color: var(--almost-white);
+  border-radius: 0.5em;
+  padding: 1em;
+  font-face:
+}
+
+.modal-dialog-button-row {
+  text-align: right;
+}

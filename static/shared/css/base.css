@@ -15,12 +15,12 @@
 
   --default-font-size: 12px; /* default for mobile */
   --large-font-size: 15px;   /* larger for desktops */
-
+  font-family: "Roboto", sans-serif;
 }
 
 body {
   font-size: var(--default-font-size);
-  font-family: "Roboto", sans-serif;
+
   background-color: var(--almost-white);
   color: black;
 }
@@ -221,20 +221,20 @@ button:active, [type=button]:active {
   font-size: 90%;
 }
 
-.api-status {
+.server-status {
   height: 1.5em;
   vertical-align: middle;
 }
 
-.api-status-good {
+.server-status-good {
   color: var(--green-text);
 }
 
-.api-status-bad {
+.server-status-bad {
   color: var(--red-text);
 }
 
-.api-status-wait {
+.server-status-wait {
   color: orange;
 }
 

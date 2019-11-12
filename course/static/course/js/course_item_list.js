@@ -1,11 +1,42 @@
 "use strict"; // defer
 
-// relies on BCM and BCM.PopupMenu namespaces
+// relies on BCM, BCM.PopupMenu, BCM.ModalDialog, BCM.ServerStatus
 BCM.CourseItemList = (function(){
   let self = {};
 
-  self.addHeading = function() {
-    let
+  async function addHeading(name) {
+    let ss = BCM.ServerStatus;
+    ss.incrementTasks();
+    let response = await fetch('/');
+    if(!response.ok) {
+      ss.error('Server returned a bad response!');
+      ss.decrementTasks();
+      return;
+    }
+
+    let text = await response.text();
+    console.log(`RESPONSE: ${text}`);
+
+    ss.decrementTasks();
+  }
+
+  self.addHeadingStart = function() {
+    BCM.ModalDialog.inputDialog(
+      'Add a Heading',
+      'Please specify a name for the new heading.',
+      function(result) {
+        if(result === false)
+          return;
+
+        if(result === '') {
+          setTimeout(() => BCM.ModalDialog.verifyDialog(
+            ':(', 'Headings need to include a non-whitespace character.'
+          ), 0)
+        }
+
+        setTimeout(() => addHeading(result), 0);
+      }
+    );
   }
 
   return self
