@@ -204,6 +204,10 @@ button:active, [type=button]:active {
   cursor: pointer;
 }
 
+.movable:hover {
+  cursor: grab;
+}
+
 .align-right {
   text-align: right;
 }

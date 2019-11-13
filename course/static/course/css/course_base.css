@@ -25,14 +25,28 @@
   /* Container with three children: icon, name, details */
   display: grid;
   grid:
-    "a b d"
-    "a c d"
-    / min-content auto min-content;
+    "e a b d"
+    "e a c d"
+    / min-content min-content auto min-content;
+}
+
+.course-item .drag-icon {
+  grid-area: e;
+  width: 2em;
+  height: 2em;
+  visibility: hidden;
+}
+
+.course-item:hover .drag-icon {
+  visibility: visible;
 }
 
 .course-item .object-icon {
   grid-area: a;
   margin-right: 1em;
+}
+
+.object-icon img {
   width: 2em;
   height: 2em;
 }
@@ -50,4 +64,20 @@
   margin-left: 1em;
   width: 1.2em;
   height: 1.2em;
+}
+
+.course-item-heading {
+  display: flex;
+}
+
+.course-item-heading .drag-icon {
+  flex: 0;
+  visibility: hidden;
+  width: 2em;
+  height: 2em;
+}
+
+.course-item-heading:hover .drag-icon {
+  flex: 1;
+  visibility: visible;
 }

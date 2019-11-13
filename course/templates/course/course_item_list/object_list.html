@@ -3,8 +3,8 @@
 
 
 {% for item in item_list %}
-  {% if item.is_heading %}
-    <h2>{{item.name}}</h2>
+  {% if.is_heading %}
+    {% include 'course/course_item_list/course_item_heading.html' %}
   {% else %}
     {% include 'course/course_item_list/course_item.html' %}
   {% endif %}
