@@ -1,9 +1,9 @@
 "use strict";
-// requires "BCM" namespace to be defined
+
 // requires "modal_dialog.css"
 // Adds model dialog functionality to pages
 
-BCM.ModalDialog = (function(){
+var ModalDialog = (function(){
   let self = {};
 
   function close_dialog(container_elem) {

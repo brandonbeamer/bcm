@@ -7,8 +7,8 @@
   <link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
   <link rel="stylesheet" href="{% static 'shared/css/popup_menu.css' %}"/>
   <link rel="stylesheet" href="{% static 'shared/css/modal-dialog.css' %}"/>
+  <link rel="stylesheet" href="{% static 'shared/css/draggable.css' %}"/>
 
-  <script src="{% static 'shared/js/bcm.js' %}" defer></script>
   <script src="{% static 'shared/js/popupmenu.js' %}" defer></script>
   <script src="{% static 'shared/js/server_status.js' %}" defer></script>
   <script src="{% static 'shared/js/modal_dialog.js' %}" defer></script>
@@ -18,6 +18,12 @@
 {% endblock %}
 
 {% block main_content %}
+
+<script>
+    const SERVER_DATA = {
+      'courseId': "{{course.id|escapejs}}",
+    };
+</script>
 
 <div id="BCM-GLOBALS"
   data-course-id="{{course.id}}">

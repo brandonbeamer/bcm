@@ -1,9 +1,8 @@
 "use strict";
 
 // Hooks into .server-status element and reports on ongoing communications
-// requires BCM
 
-BCM.ServerStatus = (function(){
+var ServerStatus = (function(){
   let self = {};
   let status_elem = document.querySelector('.server-status');
   let task_count = 0;

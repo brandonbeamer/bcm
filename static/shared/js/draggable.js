@@ -1,11 +1,10 @@
 "use strict";
 
-// requires BCM
 // .drag-hotspot items allow the user to drag
 // a .drag-hotspot's nearest .draggable parent will get dragged
 // while dragging, nearest .drag-target element will be indicated Neither
 
-BCM.Draggable = (function(){
+var Draggable = (function(){
   let self = {};
 
   let mouseOriginX = null;
@@ -16,18 +15,15 @@ BCM.Draggable = (function(){
   let initialStyle = {};
 
   function getDraggableParent(elem) {
-    while(!elem.classList.contains('draggable')) {
-      if(elem === null) {
-        // this really should never execute given how we set things up
-        // however the DOM tree might change or something so ...
-        console.error('No draggable element found!');
-        break;
+    let origElem = elem;
+    while(elem !== document){
+      if(elem.classList.contains('draggable')) {
+        return elem;
       }
-
       elem = elem.parentNode;
     }
 
-    return elem;
+    return null;
   }
 
   function startDrag(event) {
@@ -69,7 +65,7 @@ BCM.Draggable = (function(){
   for(let hs of hotSpots) {
     let draggable = getDraggableParent(hs)
     if(draggable === null) {
-      console.error('${draggable} is drag-hotspot with no .draggable parent');
+      console.error(`${hs} is .drag-hotspot with no .draggable parent`);
       continue;
     }
 

@@ -15,7 +15,7 @@
 // * Elements which match [data-drawer-id=___] .drawer-collapsed-only will
 //   be hidden while the drawer is expanded.
 
-BCM.Drawer = (function(){
+var Drawer = (function(){
   // Find all the drawers
 
   let toggle = function(drawer, exp_only, col_only) {
@@ -57,27 +57,3 @@ BCM.Drawer = (function(){
   let self = {};
   return self;
 })();
-
-// BCM.NavbarCondensed = (function(){
-//   let nb = document.getElementById("navbar-condensed");
-//   let popup = document.getElementById("navbar-popup");
-//   let more = document.querySelector('#navbar-condensed img.expand-more');
-//   let less = document.querySelector('#navbar-condensed img.expand-less');
-//
-//   let toggle = function() {
-//     if(popup.style.display == 'none') {
-//       popup.style.display = 'flex';
-//       less.hidden = false;
-//       more.hidden = true;
-//     }else{
-//       popup.style.display = 'none';
-//       less.hidden = true;
-//       more.hidden = false;
-//     }
-//   }
-//
-//   nb.addEventListener('click', toggle);
-//
-//   let self = {};
-//   return self;
-// })();

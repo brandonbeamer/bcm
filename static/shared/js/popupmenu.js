@@ -1,7 +1,7 @@
 "use strict"; // defer
 
-// BCM Popup Menu Implementation
-// Popup elements call BCM.PopupMenu.doPopup(elem, menu) on click
+// Popup Menu Implementation
+// Popup elements call PopupMenu.doPopup(elem, menu) on click
 // where 'elem' is a container element that can contain the popup and be
 // have style 'position: relative'
 // where 'menu' is an array of arrays like this:
@@ -11,7 +11,7 @@
 //   '---', // non-arrays are interpreted as separators
 // ]
 
-BCM.PopupMenu = (function(){
+var PopupMenu = (function(){
   function create_menu(elem, data) {
     elem.style.position = 'relative';
 

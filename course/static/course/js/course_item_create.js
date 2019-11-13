@@ -3,7 +3,7 @@
 // Custom behavior for CourseItem type select element
 // Hides item_content or url_content boxes depending on what is selected
 
-BCM.CourseItemCreateTypeSelect = (function(){
+var CourseItemCreateTypeSelect = (function(){
   // Assumes there is only one select element on the page to worry about
   let sel_elem = document.querySelector('select[name=content_type]');
   let url_div = document.querySelector('div._url_content');

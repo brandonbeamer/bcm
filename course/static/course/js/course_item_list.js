@@ -1,7 +1,11 @@
 "use strict"; // defer
 
-// relies on BCM, BCM.PopupMenu, BCM.ModalDialog, BCM.ServerStatus
-BCM.CourseItemList = (function(){
+// relies on PopupMenu, ModalDialog, ServerStatus
+[PopupMenu, ModalDialog, ServerStatus].forEach(function(e) {
+  if(e === undefined) throw Error('Dependencies not met.')
+});
+
+var CourseItemList = (function(){
   let self = {};
 
   async function addHeading(name) {
@@ -43,10 +47,10 @@ BCM.CourseItemList = (function(){
 })();
 
 // Pre-defined popup menus
-BCM.CourseItemList.ListElement = (function(){
+CourseItemList.ListElement = (function(){
   let menu = [
     ['Fetch', function(elem){
-      BCM.API.get_item_list(BCM.globals.courseId);
+      BCM.API.get_item_list(SERVER_DATA.courseId);
     }],
     ['Edit', function(elem){
       window.location.href = elem.dataset.editUrl

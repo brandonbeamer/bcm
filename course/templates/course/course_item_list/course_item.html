@@ -3,8 +3,8 @@
 
 {% load static %}
 
-<li class="course-item">
-  <img class="drag-icon movable drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
+<li class="course-item draggable">
+  <img class="drag-icon drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
   {% if item.content_type == 'U' %} {# for 'URL' #}
     <a class="object-icon" href="{{item.url_content}}">
       <img src="{% static 'shared/icons/link.svg' %}" alt="link icon"/>

@@ -59,7 +59,7 @@ class InstructorBaseView(LoginRequiredMixin, UserPassesTestMixin, CourseBaseView
     test_func = verify_instructor
 
 
-class CourseItemsView(EnrolledBaseView):
+class CourseItemListView(EnrolledBaseView):
     template_name = "course/course_item_list.html"
     base_context = {
         'view_name': 'course_items',
@@ -78,8 +78,10 @@ class CourseItemsView(EnrolledBaseView):
 
         return render(request, self.template_name, self.context)
 
+class ItemHeadingCreateInlineView(InstructorBaseView):
+    pass
 
-class CreateCourseItemView(InstructorBaseView):
+class CourseItemCreateView(InstructorBaseView):
     template_name = "course/course_item_create.html"
     form = CreateGeneralCourseItemForm
     # create_heading_form = OptionalCreateItemHeadingForm
@@ -126,13 +128,13 @@ class CreateCourseItemView(InstructorBaseView):
 
         return render(request, self.template_name, self.context)
 
-class CourseItemView(EnrolledBaseView):
+class CourseItemDetailView(EnrolledBaseView):
     template_name = "course/course_item_list.html"
 
-class EditCourseItemView(InstructorBaseView):
+class CourseItemUpdateView(InstructorBaseView):
     template_name = "course/course_item_update.html"
 
-class AssignmentsView(TemplateView):
+class AssignmentListView(TemplateView):
     template_name = "course/course_item_list.html"
 
 class GradebookView(TemplateView):
