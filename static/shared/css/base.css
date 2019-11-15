@@ -16,18 +16,16 @@
   --default-font-size: 12px; /* default for mobile */
   --large-font-size: 15px;   /* larger for desktops */
   font-family: "Roboto", sans-serif;
+  font-size: var(--default-font-size);
+}
+
+button, input, select, textarea {
+  font: inherit;
 }
 
 body {
-  font-size: var(--default-font-size);
-
   background-color: var(--almost-white);
   color: black;
-}
-
-button, input, select {
-  font-size: var(--default-font-size);
-  font-family: "Roboto", sans-serif;
 }
 
 footer p {

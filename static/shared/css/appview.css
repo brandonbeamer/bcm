@@ -3,13 +3,17 @@
 /* as well as layouts accessible by setting a .lo-* class on the .page element */
 
 @media only screen and (min-width: 1000px) {
-  body {
+  :root {
     font-size: var(--large-font-size);
+  }
+
+  /* body {
+
   }
 
   button, input, select, textarea {
     font-size: var(--large-font-size);
-  }
+  } */
 }
 
 .topbar {

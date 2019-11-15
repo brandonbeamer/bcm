@@ -33,8 +33,10 @@ var ModalDialog = (function(){
     let text_input = null;
     if(options.text_input) {
       let input_div = document.createElement('div');
-      let text_input = document.createElement('input');
+      text_input = document.createElement('input');
       text_input.type = 'text';
+      text_input.autofocus = true;
+
       input_div.append(text_input);
       box_div.append(input_div);
     }
@@ -66,6 +68,14 @@ var ModalDialog = (function(){
       close_dialog(container_div);
     }
     button_div.append(cancel_button);
+
+    text_input.addEventListener('keydown', (event) => {
+      if(event.key === 'Enter') ok_button.onclick();
+    });
+
+    container_div.addEventListener('keydown', (event) => {
+      if(event.key === 'Escape') cancel_button.onclick();
+    })
 
     document.body.append(container_div);
 

@@ -1,3 +1,11 @@
 .drag-hotspot {
   cursor: grab;
 }
+
+.drag-is-target-below {
+  border-top: 2px solid var(--accent-color);
+}
+
+.drag-is-target-above {
+  border-bottom: 2px solid var(--accent-color);
+}

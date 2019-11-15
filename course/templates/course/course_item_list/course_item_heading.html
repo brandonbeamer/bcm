@@ -1,7 +1,17 @@
 {% load static %}
 {# template for CourseItem Headings #}
 
-<li class="course-item-heading draggable">
-  <img class="drag-icon movable drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
-  <h2>{{item.name}}</h2>
+<li class="course-item-heading draggable drag-target" data-drag-type='line-insertion' data-drag-target-class='course-item-heading'>
+  <!-- <div> -->
+    <img class="drag-icon movable drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
+  <!-- </div> -->
+  <div class="item-heading-name">{{item.name}}</div>
+  <!-- <div> -->
+    <img
+    class="item-heading-popup clickable"
+    onclick="PopupMenu.do_popup(this, CourseItemList.ListElement.menu)"
+    data-course-id="{{course.id}}"
+    data-edit-url="{% url 'course_item_update' course_id=course.id item_id=item.id%}"
+    src="{% static 'shared/icons/more_vert.svg' %}" alt="popup icon"/>
+  <!-- </div> -->
 </li>

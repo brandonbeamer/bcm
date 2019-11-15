@@ -4,14 +4,15 @@ from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.urls import reverse, reverse_lazy
 from django.db.models import Max
+import json
 
 # from json import dumps
 
-from .models import Course, Enrollment, GeneralCourseItem, ItemHeading, ITEMHEADING_TYPE_GENERAL, ITEMHEADING_TYPE_ASSIGNMENT
-from .forms import CreateGeneralCourseItemForm
+from .models import Course, Enrollment, GeneralCourseItem, ItemHeading
+from .forms import GeneralCourseItemCreateForm, ItemHeadingCreateInlineForm
 
 # User is member of course test
 # As a side-effect, sets self.user_is_instructor appropriately,
@@ -67,23 +68,37 @@ class CourseItemListView(EnrolledBaseView):
     }
 
     def get(self, request, **kwargs):
-        item_list = self.course.generalcourseitem_set.all()
-        heading_list = self.course.itemheading_set.filter(type = ITEMHEADING_TYPE_GENERAL)
-
         self.context.update({
-            'item_list': sorted(list(item_list) + list(heading_list), key=lambda x: (x.order, x.name))
+            'item_list': self.course.get_general_course_item_list(),
         })
-
-        print(self.context.get('item_list'));
+        self.context['SERVER_DATA_JSON'] = json.dumps({
+            'heading_create_inline_url': reverse('course_item_list_heading_create_inline', kwargs = {'course_id': self.course.id})
+        })
 
         return render(request, self.template_name, self.context)
 
 class ItemHeadingCreateInlineView(InstructorBaseView):
-    pass
+    """
+    Called from client script, creates a heading and returns an updated item list
+    """
+    template_name = "course/course_item_list/item_list.html"
+    form_class = ItemHeadingCreateInlineForm
+    base_context = {}
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST);
+        if not form.is_valid():
+            return HttpResponseBadRequest()
+        obj = form.save(commit = False)
+        obj.course = self.course
+        obj.save()
+        self.context.update({'item_list': self.course.get_general_course_item_list()})
+        return render(request, self.template_name, self.context)
+
 
 class CourseItemCreateView(InstructorBaseView):
     template_name = "course/course_item_create.html"
-    form = CreateGeneralCourseItemForm
+    form = GeneralCourseItemCreateForm
     # create_heading_form = OptionalCreateItemHeadingForm
     base_context = {
         'view_name': 'create_courseitem',

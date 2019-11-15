@@ -3,32 +3,41 @@
 
 {% load static %}
 
-<li class="course-item draggable">
-  <img class="drag-icon drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
+<li class="course-item draggable drag-target" data-drag-type='line-insertion' data-drag-target-class='course-item'>
+  <div class="grid-drag">
+    <img class="drag-icon drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
+  </div>
+
+  <div class="grid-icon">
+
   {% if item.content_type == 'U' %} {# for 'URL' #}
-    <a class="object-icon" href="{{item.url_content}}">
-      <img src="{% static 'shared/icons/link.svg' %}" alt="link icon"/>
-    </a>
+    <!-- <a href="{{item.url_content}}"> -->
+      <img class="item-icon" src="{% static 'shared/icons/link.svg' %}" alt="link icon"/>
+    <!-- </a> -->
   {% else %}
-    <a class="object-icon" href="{{item.get_absolute_url}}">
-      <img src="{% static 'shared/icons/file.svg' %}" alt="file icon"/>
+    <a href="{{item.get_absolute_url}}">
+      <img class="item-icon" src="{% static 'shared/icons/file.svg' %}" alt="file icon"/>
     </a>
   {% endif %}
-  <div class="object-name">
+
+  </div>
+  <div class="item-name grid-name">
     {% if item.content_type == 'U' %} {# for 'URL' #}
       <a href="{{item.url_content}}">{{ item.name }}</a>
     {% else %}
       <a href="{{item.get_absolute_url}}">{{ item.name }}</a>
     {% endif %}
   </div>
-  <div class="object-details">
+  <div class="item-details grid-desc">
     {{ item.description }}
   </div>
-  <span class="object-popup clickable">
+  <div class="grid-popup">
     <img
-      onclick="BCM.PopupMenu.do_popup(this, BCM.CourseItemList.ListElement.menu)"
+      class="item-popup clickable grid-popup"
+      onclick="PopupMenu.do_popup(this, CourseItemList.ListElement.menu)"
       data-course-id="{{course.id}}"
       data-edit-url="{% url 'course_item_update' course_id=course.id item_id=item.id%}"
       src="{% static 'shared/icons/more_vert.svg' %}" alt="popup icon"/>
-  </span>
+  </div>
+
 </li>

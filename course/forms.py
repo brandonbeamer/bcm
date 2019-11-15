@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.forms.widgets import TextInput
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from .models import GeneralCourseItem
+from .models import GeneralCourseItem, ItemHeading
 # class OptionalCreateItemHeadingForm(ModelForm):
 #     def __init__(self, *args, **kwargs):
 #         super().__init__(*args, **kwargs)
@@ -12,7 +12,7 @@ from .models import GeneralCourseItem
 #         model = ItemHeading
 #         fields = ['name']
 
-class CreateGeneralCourseItemForm(ModelForm):
+class GeneralCourseItemCreateForm(ModelForm):
     class Meta:
         model = GeneralCourseItem
         fields = [
@@ -27,3 +27,8 @@ class CreateGeneralCourseItemForm(ModelForm):
         # # To stop browsers from trying to verify the URL themselves
         #     'url_content': TextInput(attrs={'maxlength': 200})
         # }
+
+class ItemHeadingCreateInlineForm(ModelForm):
+    class Meta:
+        model = ItemHeading
+        fields = ['name']

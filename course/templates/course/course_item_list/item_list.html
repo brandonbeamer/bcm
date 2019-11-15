@@ -1,7 +1,6 @@
 {# The item list portion of course_item_list.html #}
 {# Context should have 'item_list' set to a list of items #}
 
-
 {% for item in item_list %}
   {% if item.is_heading %}
     {% include 'course/course_item_list/course_item_heading.html' %}

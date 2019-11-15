@@ -37,6 +37,13 @@ class Course(models.Model):
     members = models.ManyToManyField(User, through = 'Enrollment',
         through_fields = ('course', 'user'))
 
+    def get_general_course_item_list(self):
+        """ Returns general items and headings, sorted """
+        item_list = self.generalcourseitem_set.all()
+        heading_list = self.itemheading_set.all()
+        return sorted(list(item_list) + list(heading_list), key=lambda x: (x.order, -x.created_at.timestamp()))
+
+
     def get_absolute_url(self):
         return reverse('course_item_list', args = [self.id])
 
@@ -110,25 +117,26 @@ class Attendance(models.Model):
 #     def __str__(self):
 #         return f"{self.name}"
 
-ITEMHEADING_TYPE_ASSIGNMENT = 'A'
-ITEMHEADING_TYPE_GENERAL = 'G'
+# ITEMHEADING_TYPE_ASSIGNMENT = 'A'
+# ITEMHEADING_TYPE_GENERAL = 'G'
 class ItemHeading(models.Model):
     """ Headings that appear on course item pages """
-    TYPE_CHOICES = [
-        (ITEMHEADING_TYPE_GENERAL, 'General'),
-        (ITEMHEADING_TYPE_ASSIGNMENT, 'Assignment'),
-    ]
+    # TYPE_CHOICES = [
+    #     (ITEMHEADING_TYPE_GENERAL, 'General'),
+    #     (ITEMHEADING_TYPE_ASSIGNMENT, 'Assignment'),
+    # ]
 
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
-    type = models.CharField(max_length = 1, choices = TYPE_CHOICES, default = ITEMHEADING_TYPE_GENERAL)
+    # type = models.CharField(max_length = 1, choices = TYPE_CHOICES, default = ITEMHEADING_TYPE_GENERAL)
     order = models.SmallIntegerField(default = 0)
     name = models.CharField(max_length = 30)
+    created_at = models.DateTimeField(auto_now_add = True)
 
     def is_heading(self):
-        return true
+        return True
 
     class Meta:
-        ordering = ['course', 'type', 'order', 'name']
+        ordering = ['course']
 
 
 COURSEITEM_CONTENT_TYPE_URL = 'U'
@@ -158,6 +166,7 @@ class CourseItem(ModelWithContent):
     description = models.CharField(max_length = 300, blank = True, help_text = "A short description of the course item")
     visible = models.BooleanField(default = True, help_text = "Whether students can see the course item")
     order = models.SmallIntegerField(default = 0)
+    created_at = models.DateTimeField(auto_now_add = True)
 
     # All the content-related stuff is inherited
 
@@ -176,7 +185,7 @@ class GeneralCourseItem(CourseItem):
         })
 
     class Meta:
-        ordering = ['course', 'order', 'name']
+        ordering = ['course']
         pass
 
 
