@@ -46,7 +46,7 @@ var ServerStatus = (function(){
   }
 
   self.error = function() {
-    error_elem = document.createElement('div');
+    let error_elem = document.createElement('div');
     error_elem.classList.add('server-status-bad');
     status_elem.after(error_elem);
     error_flag = true;

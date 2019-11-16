@@ -4,15 +4,16 @@ from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse, reverse_lazy
 from django.db.models import Max
+from django.forms import formset_factory
 import json
 
 # from json import dumps
 
 from .models import Course, Enrollment, GeneralCourseItem, ItemHeading
-from .forms import GeneralCourseItemCreateForm, ItemHeadingCreateInlineForm
+from .forms import GeneralCourseItemCreateForm, ItemHeadingCreateInlineForm, ItemOrderUpdateInlineForm
 
 # User is member of course test
 # As a side-effect, sets self.user_is_instructor appropriately,
@@ -72,10 +73,31 @@ class CourseItemListView(EnrolledBaseView):
             'item_list': self.course.get_general_course_item_list(),
         })
         self.context['SERVER_DATA_JSON'] = json.dumps({
-            'heading_create_inline_url': reverse('course_item_list_heading_create_inline', kwargs = {'course_id': self.course.id})
+            'heading_create_inline_url': reverse('course_item_list_heading_create_inline', kwargs = {'course_id': self.course.id}),
+            'item_update_order_inline_url': reverse('course_item_list_order_update_inline', kwargs = {'course_id': self.course.id}),
         })
 
         return render(request, self.template_name, self.context)
+
+class ItemOrderUpdateInlineView(InstructorBaseView):
+    # No template, it either goes through or doesn't
+    form_class = ItemOrderUpdateInlineForm
+
+    def post(self, request, **kwargs):
+        formset_class = formset_factory(self.form_class, extra = 2)
+        formset = formset_class(request.POST)
+        # print(formset.as_p())
+        if not formset.is_valid():
+            return HttpResponseBadRequest();
+
+        for form in formset:
+            object_class = ItemHeading if form.cleaned_data['is_heading'] else GeneralCourseItem
+            object = get_object_or_404(object_class, id=form.cleaned_data['id'])
+            object.order = form.cleaned_data['order']
+            object.save()
+
+        return HttpResponse(); # OK
+
 
 class ItemHeadingCreateInlineView(InstructorBaseView):
     """

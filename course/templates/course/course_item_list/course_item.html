@@ -3,7 +3,7 @@
 
 {% load static %}
 
-<li class="course-item draggable drag-target" data-drag-type='line-insertion' data-drag-target-class='course-item'>
+<li class="course-item draggable drag-target" data-item-id="{{item.id}}" data-drag-type='abovebelow' data-drag-target-selector='.course-item, .course-item-heading'>
   <div class="grid-drag">
     <img class="drag-icon drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
   </div>

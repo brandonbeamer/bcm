@@ -1,24 +1,41 @@
 "use strict"; // defer
 
 // relies on PopupMenu, ModalDialog, ServerStatus
-[PopupMenu, ModalDialog, ServerStatus, ServerData, ServerPost].forEach(function(e) {
+[PopupMenu, ModalDialog, ServerStatus, ServerData, ServerPost, Draggable].forEach(function(e) {
   if(e === undefined) throw Error('Dependencies not met.')
 });
 
 var CourseItemList = (function(){
   let self = {};
 
-  async function addHeading(name) {
+  // ------------------- Private stuff -----------------------
+
+  // For dragging items
+  Draggable.registerDropCallback('course-item', handleCourseItemDrop);
+  Draggable.registerDropCallback('course-item-heading', handleCourseItemHeadingDrop);
+
+  async function postData(action, data) {
+    console.log('Posting data:');
+    console.log(data);
+
     let ss = ServerStatus;
     ss.incrementTasks();
 
-    let action = ServerData.heading_create_inline_url
+    let response = await ServerPost.postData(action, data);
 
-    let response = await ServerPost.postData(action, {'name': name});
     if(!response.ok) {
       ss.error('Server returned a bad response!');
-      return;
     }
+
+    ss.decrementTasks();
+    return response;
+  }
+
+  async function addHeading(name) {
+    let action = ServerData.heading_create_inline_url
+
+    let response = await postData(action, {'name': name});
+    if(!response.ok) return;
 
     let text = await response.text();
     let ul = document.querySelector('.item-list');
@@ -30,8 +47,70 @@ var CourseItemList = (function(){
 
     ul.innerHTML = text;
 
-    ss.decrementTasks();
   }
+
+  async function updateOrder() {
+    let items = document.querySelectorAll('.item-list li');
+    let order = 1;
+    let data = [];
+    for(let item of items) {
+      let itemData = {};
+      if(item.classList.contains('course-item-heading'))
+        itemData.is_heading = 'checked';
+      itemData.id = item.dataset.itemId;
+      itemData.order = order;
+
+      data.push(itemData);
+      order++;
+    }
+
+    let action = ServerData.item_update_order_inline_url
+    let response = await postData(action, data);
+    if(!response.ok) {
+      ServerStatus.error("Couldn't update item order :(");
+      return;
+    }
+
+    // if response.ok, then silence
+
+  }
+
+  function handleCourseItemDrop(draggedElement, dropDetails) {
+    // dropDetails is an object with .elem, .dx, .dy, and .dist
+    // if drag-type is 'abovebelow', then dropDetails.abovebelow will be either 'above' or 'below'
+    //   'above' indicating that draggedElement was dropped above the target element.
+
+    if(dropDetails.abovebelow === 'above') {
+      dropDetails.elem.before(draggedElement);
+    }else{
+      dropDetails.elem.after(draggedElement);
+    }
+
+    updateOrder();
+  }
+
+  function handleCourseItemHeadingDrop(draggedElement, dropDetails) {
+    let next = draggedElement.nextElementSibling;
+
+    if(dropDetails.abovebelow === 'above') {
+      dropDetails.elem.before(draggedElement);
+    }else{
+      dropDetails.elem.after(draggedElement);
+    }
+
+
+    while(next != null && next.classList.contains('course-item')) {
+        let moveThis = next;
+        next = next.nextElementSibling;
+
+        draggedElement.after(moveThis);
+        draggedElement = draggedElement.nextElementSibling;
+    }
+
+    updateOrder();
+  }
+
+  // ---------------------- public functions ----------------
 
   self.addHeadingStart = function() {
     ModalDialog.inputDialog(

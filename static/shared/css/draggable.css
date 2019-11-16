@@ -2,10 +2,10 @@
   cursor: grab;
 }
 
-.drag-is-target-below {
+.is-drag-target-below {
   border-top: 2px solid var(--accent-color);
 }
 
-.drag-is-target-above {
+.is-drag-target-above {
   border-bottom: 2px solid var(--accent-color);
 }
