@@ -50,7 +50,7 @@ var ServerStatus = (function(){
     error_elem.classList.add('server-status-bad');
     status_elem.after(error_elem);
     error_flag = true;
-    setTimeout(() => error_elem.remove(), 5000);
+    //setTimeout(() => error_elem.remove(), 5000);
   }
 
   return self;

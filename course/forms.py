@@ -39,3 +39,6 @@ class ItemOrderUpdateInlineForm(Form):
     is_heading = forms.BooleanField(required = False)
     id = forms.IntegerField()
     order = forms.IntegerField()
+
+class ItemIdForm(Form):
+    id = forms.IntegerField()

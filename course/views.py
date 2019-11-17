@@ -13,7 +13,7 @@ import json
 # from json import dumps
 
 from .models import Course, Enrollment, GeneralCourseItem, ItemHeading
-from .forms import GeneralCourseItemCreateForm, ItemHeadingCreateInlineForm, ItemOrderUpdateInlineForm
+from .forms import GeneralCourseItemCreateForm, ItemHeadingCreateInlineForm, ItemOrderUpdateInlineForm, ItemIdForm
 
 # User is member of course test
 # As a side-effect, sets self.user_is_instructor appropriately,
@@ -74,7 +74,10 @@ class CourseItemListView(EnrolledBaseView):
         })
         self.context['SERVER_DATA_JSON'] = json.dumps({
             'heading_create_inline_url': reverse('course_item_list_heading_create_inline', kwargs = {'course_id': self.course.id}),
+            'heading_delete_inline_url': reverse('course_item_list_heading_delete_inline', kwargs = {'course_id': self.course.id}),
             'item_update_order_inline_url': reverse('course_item_list_order_update_inline', kwargs = {'course_id': self.course.id}),
+            'item_delete_inline_url': reverse('course_item_list_item_delete_inline', kwargs = {'course_id': self.course.id}),
+
         })
 
         return render(request, self.template_name, self.context)
@@ -97,6 +100,30 @@ class ItemOrderUpdateInlineView(InstructorBaseView):
             object.save()
 
         return HttpResponse(); # OK
+
+class CourseItemDeleteInlineView(InstructorBaseView):
+    form_class = ItemIdForm
+    def post(self, request, **kwargs):
+        form = self.form_class(request.POST)
+        if(not form.is_valid()):
+            return HttpResponseBadRequest();
+
+        obj = get_object_or_404(GeneralCourseItem, id=form.cleaned_data['id'])
+        obj.delete()
+        return HttpResponse();
+
+
+
+class ItemHeadingDeleteInlineView(InstructorBaseView):
+    form_class = ItemIdForm
+    def post(self, request, **kwargs):
+        form = self.form_class(request.POST)
+        if(not form.is_valid()):
+            return HttpResponseBadRequest();
+
+        obj = get_object_or_404(ItemHeading, id=form.cleaned_data['id'])
+        obj.delete()
+        return HttpResponse();
 
 
 class ItemHeadingCreateInlineView(InstructorBaseView):

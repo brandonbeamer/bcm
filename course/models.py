@@ -140,8 +140,8 @@ class ItemHeading(models.Model):
 
 
 COURSEITEM_CONTENT_TYPE_URL = 'U'
-COURSEITEM_CONTENT_TYPE_PLAINTEXT = 'U'
-COURSEITEM_CONTENT_TYPE_MARKDOWN = 'U'
+COURSEITEM_CONTENT_TYPE_PLAINTEXT = 'T'
+COURSEITEM_CONTENT_TYPE_MARKDOWN = 'M'
 class ModelWithContent(models.Model):
     """ Abstract model for representing the content (online-viewable) part of things that have it """
     CONTENT_TYPE_CHOICES = [

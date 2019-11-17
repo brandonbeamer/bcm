@@ -46,7 +46,7 @@ var CourseItemList = (function(){
     }
 
     ul.innerHTML = text;
-
+    Draggable.updateHotSpots();
   }
 
   async function updateOrder() {
@@ -90,7 +90,7 @@ var CourseItemList = (function(){
   }
 
   function handleCourseItemHeadingDrop(draggedElement, dropDetails) {
-    let next = draggedElement.nextElementSibling;
+    let headingItems = getHeadingItems(draggedElement);
 
     if(dropDetails.abovebelow === 'above') {
       dropDetails.elem.before(draggedElement);
@@ -98,19 +98,106 @@ var CourseItemList = (function(){
       dropDetails.elem.after(draggedElement);
     }
 
-
-    while(next != null && next.classList.contains('course-item')) {
-        let moveThis = next;
-        next = next.nextElementSibling;
-
-        draggedElement.after(moveThis);
-        draggedElement = draggedElement.nextElementSibling;
+    let insertHere = draggedElement;
+    for(let item of headingItems) {
+      insertHere.after(item);
+      insertHere = item;
     }
 
     updateOrder();
   }
 
+  function getHeadingItems(headingElement) {
+    if(!headingElement.classList.contains('course-item-heading')) {
+      console.error(`${headingElement} is not a heading.`);
+      return;
+    }
+    let next = headingElement.nextElementSibling;
+    let items = [];
+    while(next != null && next.classList.contains('course-item')) {
+      items.push(next);
+      next = next.nextElementSibling;
+    }
+
+    return items;
+  }
+
+  async function deleteCourseItem(itemId) {
+    let action = ServerData.item_delete_inline_url;
+
+    let elem = document.querySelector(`li.course-item[data-item-id='${itemId}']`);
+    elem.classList.add('pending-delete');
+
+    let response = await postData(action, {id: itemId});
+    if(!response.ok) {
+      elem.classList.remove('pending-delete');
+      return;
+    }
+
+    elem.remove();
+    Draggable.updateHotSpots();
+  }
+
+  async function deleteItemHeading(itemId) {
+    let action = ServerData.heading_delete_inline_url;
+
+    let elem = document.querySelector(`li.course-item-heading[data-item-id='${itemId}']`);
+    elem.classList.add('pending-delete');
+
+    let response = await postData(action, {id: itemId});
+    if(!response.ok) {
+      elem.classList.remove('pending-delete');
+      return;
+    }
+
+    elem.remove();
+    Draggable.updateHotSpots();
+  }
+
   // ---------------------- public functions ----------------
+  self.Menus = {};
+  self.Menus.CourseItemMenu = [
+      ['Delete', function(popupElem) {
+        let item = document.querySelector(`li.course-item[data-item-id='${popupElem.dataset.itemId}']`);
+        if(item == null) {
+          console.error("Can't find item!")
+          return;
+        }
+        ModalDialog.confirmDialog(
+          'Confirm Delete',
+          'Are you sure you want to delete this course item?',
+          function(result) {
+            if(!result) return;
+
+            deleteCourseItem(popupElem.dataset.itemId);
+          }
+        );
+
+      }]
+  ];
+
+  self.Menus.ItemHeadingMenu = [
+      ['Delete', function(popupElem) {
+        let heading = document.querySelector(`li.course-item-heading[data-item-id='${popupElem.dataset.itemId}']`);
+        if(heading == null) {
+          console.error("Can't find heading!")
+          return;
+        }
+        let items = getHeadingItems(heading);
+        ModalDialog.confirmDialog(
+          'Confirm Delete',
+          `You are about to permanently delete a course heading as well as ${items.length} item(s) under it. Are you sure about this?`,
+          function(result) {
+            if(!result) return;
+
+            for(let item of items) {
+              deleteCourseItem(item.dataset.itemId);
+            }
+            deleteItemHeading(heading.dataset.itemId);
+          }
+        );
+      }]
+  ];
 
   self.addHeadingStart = function() {
     ModalDialog.inputDialog(
@@ -121,7 +208,7 @@ var CourseItemList = (function(){
           return;
 
         if(result === '') {
-          setTimeout(() => ModalDialog.verifyDialog(
+          setTimeout(() => ModalDialog.confirmDialog(
             ':(', 'Headings need to include a non-whitespace character.'
           ), 0)
         }
@@ -132,25 +219,4 @@ var CourseItemList = (function(){
   }
 
   return self
-})();
-
-// Pre-defined popup menus
-CourseItemList.ListElement = (function(){
-  let menu = [
-    ['Fetch', function(elem){
-      // BCM.API.get_item_list(SERVER_DATA.courseId);
-    }],
-    ['Edit', function(elem){
-      window.location.href = elem.dataset.editUrl
-    }],
-    ['Toggle Visibility', function(){console.log('Clicked Toggle!')}],
-    '-',
-    ['Delete', function(){console.log('Clicked Delete :o')}]
-  ]
-
-  let self = {
-    'menu': menu
-  };
-
-  return self;
 })();

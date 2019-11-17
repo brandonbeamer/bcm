@@ -12,7 +12,7 @@
     ". . ." 1fr
     ". a ." min-content
     ". . ." 1fr
-     / 1fr min-content 1fr;
+     / 1fr minmax(20em, 40em) 1fr;
 }
 
 .modal-dialog-box {
@@ -20,7 +20,11 @@
   background-color: var(--almost-white);
   border-radius: 0.5em;
   padding: 1em;
-  font-face:
+  margin: 1em;
+}
+
+.modal-dialog-box input {
+  width: 100%;
 }
 
 .modal-dialog-button-row {

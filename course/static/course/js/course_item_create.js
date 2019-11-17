@@ -8,15 +8,15 @@ var CourseItemCreateTypeSelect = (function(){
   let sel_elem = document.querySelector('select[name=content_type]');
   let url_div = document.querySelector('div._url_content');
   let text_div = document.querySelector('div._text_content');
-  if(sel_elem === null) {
+  if(sel_elem == null) {
     console.error('No content_type select element found!');
   }
 
-  if(url_div === null) {
+  if(url_div == null) {
     console.error('No url container found!');
   }
 
-  if(text_div === null) {
+  if(text_div == null) {
     console.error('No text container found!');
   }
 

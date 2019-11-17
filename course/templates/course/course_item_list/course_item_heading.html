@@ -9,8 +9,8 @@
   <!-- <div> -->
     <img
     class="item-heading-popup clickable"
-    onclick="PopupMenu.do_popup(this, CourseItemList.ListElement.menu)"
-    data-course-id="{{course.id}}"
+    onclick="PopupMenu.doPopup(CourseItemList.Menus.ItemHeadingMenu, this)"
+    data-item-id="{{item.id}}"
     data-edit-url="{% url 'course_item_update' course_id=course.id item_id=item.id%}"
     src="{% static 'shared/icons/more_vert.svg' %}" alt="popup icon"/>
   <!-- </div> -->

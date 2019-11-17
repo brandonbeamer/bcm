@@ -35,8 +35,6 @@ var ModalDialog = (function(){
       let input_div = document.createElement('div');
       text_input = document.createElement('input');
       text_input.type = 'text';
-      text_input.autofocus = true;
-
       input_div.append(text_input);
       box_div.append(input_div);
     }
@@ -66,29 +64,36 @@ var ModalDialog = (function(){
     cancel_button.onclick = function() {
       options.result_callback(false);
       close_dialog(container_div);
-    }
+    };
     button_div.append(cancel_button);
 
-    text_input.addEventListener('keydown', (event) => {
-      if(event.key === 'Enter') ok_button.onclick();
-    });
+    if(options.text_input) {
+      text_input.addEventListener('keydown', (event) => {
+        if(event.key === 'Enter') ok_button.onclick();
+      });
+    }
 
-    container_div.addEventListener('keydown', (event) => {
-      if(event.key === 'Escape') cancel_button.onclick();
-    })
+    document.addEventListener('keydown', (event) => {
+      if(event.key === 'Escape' || event.key === 'Esc') cancel_button.onclick();
+    }, {once: true});
 
     document.body.append(container_div);
+    if(options.text_input) {
+      text_input.focus();
+    }else{
+      ok_button.focus();
+    }
 
   }
 
-  // verifyDialog is a simple OK/Cancel dialog with a title and a message
-  self.verifyDialog = function(title, message, callback) {
+  // confirmDialog is a simple OK/Cancel dialog with a title and a message
+  self.confirmDialog = function(title, message, callback) {
     build_dialog({
       'title': title,
       'message': message,
       'result_callback': callback
     })
-  }
+  };
 
   self.inputDialog = function(title, message, callback) {
     build_dialog({
@@ -97,7 +102,7 @@ var ModalDialog = (function(){
       'text_input': true,
       'result_callback': callback
     })
-  }
+  };
 
   return self;
 })();

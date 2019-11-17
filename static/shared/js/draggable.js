@@ -103,6 +103,7 @@ var Draggable = (function(){
   }
 
   function startDrag(event) {
+    event.preventDefault();
     dragging = event.target;
 
     dragging = getDraggableParent(dragging);
@@ -197,13 +198,14 @@ var Draggable = (function(){
 
   function endDrag() {
     updateDrag();
-    clearDragClasses(dragClosest.elem);
+
     dragging.style.top = '0';
     dragging.style.left = '0';
     document.removeEventListener('mousemove', updateMouse);
     clearInterval(intervalId);
 
     if(dragClosest !== null) {
+      clearDragClasses(dragClosest.elem);
       dropCallback(dragging, dragClosest);
     }
 
@@ -215,24 +217,23 @@ var Draggable = (function(){
     mouseY = event.pageY;
   }
 
+  self.updateHotSpots = function() {
+    let hotSpots = document.querySelectorAll('.drag-hotspot');
+    for(let hs of hotSpots) {
+      let draggable = getDraggableParent(hs)
+      if(draggable === null) {
+        console.error(`${hs} is .drag-hotspot with no .draggable parent`);
+        continue;
+      }
 
-
-
-  let hotSpots = document.querySelectorAll('.drag-hotspot');
-  for(let hs of hotSpots) {
-    let draggable = getDraggableParent(hs)
-    if(draggable === null) {
-      console.error(`${hs} is .drag-hotspot with no .draggable parent`);
-      continue;
+      hs.onmousedown = startDrag;
+      draggable.style.position = 'relative'; // all draggables need to be relative
     }
 
-    hs.addEventListener('mousedown', function(event){
-      event.preventDefault();
-      startDrag(event);
-    });
-
-    draggable.style.position = 'relative'; // all draggables need to be relative
   }
+
+
+  self.updateHotSpots();
 
   return self;
 })();

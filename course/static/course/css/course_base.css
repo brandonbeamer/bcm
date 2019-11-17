@@ -27,8 +27,17 @@ ul.item-list {
 }
 
 .item-list li {
-  padding: 0.5em;
+  padding: 0.2em;
   margin: 0;
+}
+
+.item-list li.course-item-heading {
+  margin-top: 2em;
+}
+
+.course-item, .course-item-heading {
+  border-top: 2px solid #00000000;
+  border-bottom: 2px solid #00000000;
 }
 
 .course-item {
@@ -119,4 +128,8 @@ ul.item-list {
 .course-item-heading .item-heading-popup {
   width: 1.4em;
   height: 1.4em;
+}
+
+.pending-delete {
+  background-color: #FF000010;
 }

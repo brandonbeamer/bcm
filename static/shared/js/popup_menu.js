@@ -12,7 +12,7 @@
 // ]
 
 var PopupMenu = (function(){
-  function create_menu(elem, data) {
+  function createMenu(data, elem) {
     elem.style.position = 'relative';
 
     let ul = document.createElement('ul');
@@ -27,7 +27,7 @@ var PopupMenu = (function(){
       }else{
         li = document.createElement('li');
         li.innerHTML = text;
-        li.onclick = callback;
+        li.onclick = function(){callback(elem)};
       }
       ul.append(li);
 
@@ -38,15 +38,11 @@ var PopupMenu = (function(){
     document.addEventListener('click', function(){ul.remove()}, {'once': true});
   }
 
-  // document.addEventListener('click', remove_menu);
-
   let self = {};
 
-  self.do_popup = function(elem, data) {
-    setTimeout(function(){create_menu(elem, data)}, 0);
+  self.doPopup = function(data, elem) {
+    setTimeout(function(){createMenu(data, elem)}, 0);
   }
 
   return self;
 })();
-
-// BCM.PopupMenu.do_popup(['foo', 'bar', 'baz']);
