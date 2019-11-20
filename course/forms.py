@@ -42,3 +42,7 @@ class ItemOrderUpdateInlineForm(Form):
 
 class ItemIdForm(Form):
     id = forms.IntegerField()
+
+class IdVisibleForm(Form):
+    id = forms.IntegerField()
+    visible = forms.BooleanField(required = False)

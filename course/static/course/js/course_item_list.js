@@ -15,8 +15,8 @@ var CourseItemList = (function(){
   Draggable.registerDropCallback('course-item-heading', handleCourseItemHeadingDrop);
 
   async function postData(action, data) {
-    console.log('Posting data:');
-    console.log(data);
+    // console.log('Posting data:');
+    // console.log(data);
 
     let ss = ServerStatus;
     ss.incrementTasks();
@@ -32,7 +32,7 @@ var CourseItemList = (function(){
   }
 
   async function addHeading(name) {
-    let action = ServerData.heading_create_inline_url
+    let action = ServerData.course_item_heading_create_inline_url
 
     let response = await postData(action, {'name': name});
     if(!response.ok) return;
@@ -56,15 +56,15 @@ var CourseItemList = (function(){
     for(let item of items) {
       let itemData = {};
       if(item.classList.contains('course-item-heading'))
-        itemData.is_heading = 'checked';
+        itemData.is_heading = 'on';
       itemData.id = item.dataset.itemId;
       itemData.order = order;
 
       data.push(itemData);
       order++;
-    }
 
-    let action = ServerData.item_update_order_inline_url
+    }
+    let action = ServerData.course_item_order_update_inline_url
     let response = await postData(action, data);
     if(!response.ok) {
       ServerStatus.error("Couldn't update item order :(");
@@ -86,16 +86,29 @@ var CourseItemList = (function(){
       dropDetails.elem.after(draggedElement);
     }
 
+    let headingElem = getHeadingOfItem(draggedElement);
     updateOrder();
+
+    if(headingElem == null) return;
+
+    let headingVisible = !headingElem.classList.contains('not-visible');
+    let itemVisible = !draggedElement.classList.contains('not-visible');
+
+    if(headingVisible != itemVisible) {
+      if(itemVisible) {
+        // if item is visible, make heading visible too
+        updateCourseItemHeadingVisible(headingElem, true, true);
+      }
+    }
   }
 
   function handleCourseItemHeadingDrop(draggedElement, dropDetails) {
-    let headingItems = getHeadingItems(draggedElement);
+    let headingItems = getItemsUnderHeading(draggedElement);
 
     if(dropDetails.abovebelow === 'above') {
       dropDetails.elem.before(draggedElement);
     }else{
-      dropDetails.elem.after(draggedElement);
+      getLastElementUnderHeading(dropDetails.elem).after(draggedElement);
     }
 
     let insertHere = draggedElement;
@@ -107,7 +120,20 @@ var CourseItemList = (function(){
     updateOrder();
   }
 
-  function getHeadingItems(headingElement) {
+  function isVisible(elem) {
+    return elem.dataset.itemVisibility === 'visible';
+  }
+
+  function getHeadingOfItem(itemElem) {
+    let e = itemElem;
+    while(e != null && !e.classList.contains('course-item-heading')) {
+      e = e.previousElementSibling;
+    }
+
+    return e; // will either be null/undef or a heading
+  }
+
+  function getItemsUnderHeading(headingElement) {
     if(!headingElement.classList.contains('course-item-heading')) {
       console.error(`${headingElement} is not a heading.`);
       return;
@@ -122,13 +148,20 @@ var CourseItemList = (function(){
     return items;
   }
 
-  async function deleteCourseItem(itemId) {
-    let action = ServerData.item_delete_inline_url;
+  function getLastElementUnderHeading(headingElement) {
+    // returns the last "child" of heading or the heading if there are no children
+    let e = headingElement;
+    while(e.nextElementSibling != null && e.nextElementSibling.classList.contains('course-item')) {
+      e = e.nextElementSibling;
+    }
+    return e;
+  }
 
-    let elem = document.querySelector(`li.course-item[data-item-id='${itemId}']`);
+  async function deleteCourseItem(elem) {
+    let action = ServerData.course_item_delete_inline_url;
     elem.classList.add('pending-delete');
 
-    let response = await postData(action, {id: itemId});
+    let response = await postData(action, {id: elem.dataset.itemId});
     if(!response.ok) {
       elem.classList.remove('pending-delete');
       return;
@@ -138,66 +171,130 @@ var CourseItemList = (function(){
     Draggable.updateHotSpots();
   }
 
-  async function deleteItemHeading(itemId) {
-    let action = ServerData.heading_delete_inline_url;
+  async function deleteManyCourseItems(itemArray) {
+    let action = ServerData.course_item_delete_set_inline_url;
+    for(let e of itemArray){
+      e.classList.add('pending-delete');
+    }
 
-    let elem = document.querySelector(`li.course-item-heading[data-item-id='${itemId}']`);
+    let response = await postData(action, itemArray.map(function(elem){return {'id': elem.dataset.itemId}}));
+    if(!response.ok) {
+      for(let elem of itemArray) {
+        elem.classList.remove('pending-delete');
+      }
+
+      return;
+    }
+
+    for(let elem of itemArray) {
+      elem.remove();
+    }
+    Draggable.updateHotSpots();
+  }
+
+  async function deleteCourseItemHeading(elem) {
+    let action = ServerData.course_item_heading_delete_inline_url;
+
     elem.classList.add('pending-delete');
 
-    let response = await postData(action, {id: itemId});
+    let response = await postData(action, {id: elem.dataset.itemId});
     if(!response.ok) {
       elem.classList.remove('pending-delete');
       return;
     }
 
     elem.remove();
+    Draggable.updateHotSpots();
+  }
+
+  async function updateCourseItemVisible(elem, visible) {
+    if(isVisible(elem) === visible) return;
+
+    let action = ServerData.course_item_visible_update_inline_url;
+
+    let data = {id: elem.dataset.itemId};
+    if(visible) data['visible'] = 'on';
+
+    let response = await postData(action, data);
+    if(!response.ok) return;
+    let newHTML = await response.text();
+    let template = document.createElement('template');
+    template.innerHTML = newHTML.trim();
+    elem.replaceWith(template.content.firstChild);
+    Draggable.updateHotSpots();
+  }
+
+  async function updateCourseItemHeadingVisible(headingElem, visible) {
+    if(isVisible(headingElem) === visible) return;
+    let headingAction = ServerData.course_item_heading_visible_update_inline_url
+    let headingData = {id: headingElem.dataset.itemId};
+    if(visible) headingData['visible'] = 'on';
+
+    let response = await postData(headingAction, headingData);
+    if(!response.ok) return;
+    let newHTML = await response.text();
+    let template = document.createElement('template');
+    template.innerHTML = newHTML.trim();
+    headingElem.replaceWith(template.content.firstChild);
     Draggable.updateHotSpots();
   }
 
   // ---------------------- public functions ----------------
   self.Menus = {};
-  self.Menus.CourseItemMenu = [
-      ['Delete', function(popupElem) {
-        let item = document.querySelector(`li.course-item[data-item-id='${popupElem.dataset.itemId}']`);
-        if(item == null) {
-          console.error("Can't find item!")
-          return;
+  self.Menus.getCourseItemMenu = function(elem) {
+    let menu = [];
+    if(isVisible(elem)) {
+      menu.push(['Hide', function() {
+        updateCourseItemVisible(elem, false);
+      }]);
+    }else{
+      menu.push(['Show', function() {
+        updateCourseItemVisible(elem, true);
+        updateCourseItemHeadingVisible(getHeadingOfItem(elem), true);
+      }]);
+    }
+    menu.push(['-']);
+    menu.push(['Delete', () =>ModalDialog.confirmDialog(
+      'Confirm Delete',
+      'Are you sure you want to delete this course item?',
+      () => deleteCourseItem(elem)
+    )]);
+    return menu;
+  };
+
+  self.Menus.getCourseItemHeadingMenu = function(elem) {
+    let menu = [];
+    if(isVisible(elem)) {
+      menu.push(['Hide', function() {
+        updateCourseItemHeadingVisible(elem, false);
+        let items = getItemsUnderHeading(elem);
+        for(let item of items) {
+          updateCourseItemVisible(item, false);
         }
-        ModalDialog.confirmDialog(
-          'Confirm Delete',
-          'Are you sure you want to delete this course item?',
-          function(result) {
-            if(!result) return;
-
-            deleteCourseItem(popupElem.dataset.itemId);
-          }
-        );
-
-      }]
-  ];
-
-  self.Menus.ItemHeadingMenu = [
-      ['Delete', function(popupElem) {
-        let heading = document.querySelector(`li.course-item-heading[data-item-id='${popupElem.dataset.itemId}']`);
-        if(heading == null) {
-          console.error("Can't find heading!")
-          return;
+      }]);
+    }else {
+      menu.push(['Show', function() {
+        updateCourseItemHeadingVisible(elem, true);
+        let items = getItemsUnderHeading(elem);
+        for(let item of items) {
+          updateCourseItemVisible(item, true);
         }
-        let items = getHeadingItems(heading);
-        ModalDialog.confirmDialog(
-          'Confirm Delete',
-          `You are about to permanently delete a course heading as well as ${items.length} item(s) under it. Are you sure about this?`,
-          function(result) {
-            if(!result) return;
+      }]);
+    }
+    menu.push(['-']);
+    menu.push(['Delete', () => {
+      let items = getItemsUnderHeading(elem);
+      ModalDialog.confirmDialog(
+        'Confirm Delete',
+        `You are about to permanently delete a course heading as well as ${items.length} item(s) under it. Are you sure about this?`,
+        () => {
+          deleteManyCourseItems(items);
+          deleteCourseItemHeading(elem);
+        })
+      }]);
+    return menu;
+  }
 
-            for(let item of items) {
-              deleteCourseItem(item.dataset.itemId);
-            }
-            deleteItemHeading(heading.dataset.itemId);
-          }
-        );
-      }]
-  ];
 
   self.addHeadingStart = function() {
     ModalDialog.inputDialog(

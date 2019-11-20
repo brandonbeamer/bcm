@@ -21,7 +21,7 @@ class AttendanceAdmin(admin.ModelAdmin):
 
 @admin.register(models.ItemHeading)
 class ItemHeadingAdmin(admin.ModelAdmin):
-    list_display = ['course', 'order', 'name']
+    list_display = ['course', 'order', 'name', 'visible']
 
 @admin.register(models.GeneralCourseItem)
 class GeneralCourseItemAdmin(admin.ModelAdmin):

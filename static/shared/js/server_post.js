@@ -13,7 +13,7 @@ var ServerPost = (function(){
 
     if(Array.isArray(object)) {
       // post a formset
-      console.log('is array');
+      // console.log('is array');
       return await postArray(action, object);
     }else{
       // post a single form
@@ -26,8 +26,8 @@ var ServerPost = (function(){
     // object is array
     // will be received by django as formset
 
-    console.log('Posting array:');
-    console.log(objects);
+    // console.log('Posting array:');
+    // console.log(objects);
 
     let formdata = new FormData()
     formdata.set('form-TOTAL_FORMS', objects.length);
@@ -40,10 +40,10 @@ var ServerPost = (function(){
       for(let field in object) {
         if(Array.isArray(object[field])) {
           for(let val of object[field]) {
-            formdata.append(`form-${formNum}-${field}`, val);
+            formdata.append(`form-${formNum}-${field}`, fixValue(val));
           }
         }else{
-          formdata.set(`form-${formNum}-${field}`, object[field]);
+          formdata.set(`form-${formNum}-${field}`, fixValue(object[field]));
         }
       }
       formNum++;
@@ -53,8 +53,8 @@ var ServerPost = (function(){
   }
 
   async function postObject(action, object) {
-    console.log('Posting object:');
-    console.log(object);
+    // console.log('Posting object:');
+    // console.log(object);
 
 
     let formdata = new FormData();
@@ -62,10 +62,10 @@ var ServerPost = (function(){
     for(let field in object) {
       if(Array.isArray(object[field])) {
         for(let val of object[field]) {
-          formdata.append(field, val);
+          formdata.append(field, fixValue(val));
         }
       }else{
-        formdata.set(field, object[field]);
+        formdata.set(field, fixValue(object[field]));
       }
     }
 
@@ -73,8 +73,8 @@ var ServerPost = (function(){
   }
 
   async function postFormData(action, formdata) {
-    console.log('Posting form:');
-    console.log(formdata);
+    // console.log('Posting form:');
+    // console.log(formdata);
 
     formdata.append('csrfmiddlewaretoken', Cookies.get('csrftoken'));
 
@@ -95,6 +95,19 @@ var ServerPost = (function(){
     }
 
     return response;
+  }
+
+  function fixValue(val) {
+    // converts values types for FormData
+    if(typeof(val) === 'boolean') {
+      if(val) {
+        return 'on';
+      }else{
+        return '';
+      }
+    }
+
+    return val;
   }
 
   return self;

@@ -94,6 +94,10 @@ ul.item-list {
   font-size: 110%;
 }
 
+.not-visible .item-name, .not-visible .item-details, .not-visible .item-icon, .not-visible .item-heading-name {
+  opacity: 50%;
+}
+
 .course-item .item-details {
 
 }

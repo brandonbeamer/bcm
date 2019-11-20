@@ -131,6 +131,7 @@ class ItemHeading(models.Model):
     order = models.SmallIntegerField(default = 0)
     name = models.CharField(max_length = 30)
     created_at = models.DateTimeField(auto_now_add = True)
+    visible = models.BooleanField(default = True)
 
     def is_heading(self):
         return True

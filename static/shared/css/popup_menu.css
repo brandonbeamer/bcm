@@ -1,5 +1,4 @@
-.object-popup {
-  /* relative positioned wrapper for containing menu */
+.popup-container {  /* relative positioned wrapper for containing menu */
   position: relative;
 }
 

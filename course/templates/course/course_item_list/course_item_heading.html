@@ -1,17 +1,19 @@
 {% load static %}
 {# template for CourseItem Headings #}
 
-<li class="course-item-heading draggable drag-target" data-item-id="{{item.id}}" data-drag-type='abovebelow' data-drag-target-selector='.course-item-heading' data-drag-ondrop=''>
-  <!-- <div> -->
-    <img class="drag-icon movable drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
-  <!-- </div> -->
+<li id="course-item-heading:{{item.id}}" class="course-item-heading draggable drag-target {% if not item.visible %}not-visible{% endif %}"
+  data-item-id="{{item.id}}"
+  data-item-visibility="{% if item.visible %}visible{% else %}hidden{% endif %}"
+  data-update-url="{% url 'course_item_update' course_id=course.id item_id=item.id%}"
+  data-drag-type='abovebelow'
+  data-drag-target-selector='.course-item-heading'
+  data-drag-ondrop=''>
+  <img class="drag-icon movable drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
   <div class="item-heading-name">{{item.name}}</div>
-  <!-- <div> -->
+  <div class="popup-container">
     <img
-    class="item-heading-popup clickable"
-    onclick="PopupMenu.doPopup(CourseItemList.Menus.ItemHeadingMenu, this)"
-    data-item-id="{{item.id}}"
-    data-edit-url="{% url 'course_item_update' course_id=course.id item_id=item.id%}"
-    src="{% static 'shared/icons/more_vert.svg' %}" alt="popup icon"/>
-  <!-- </div> -->
+      class="item-heading-popup clickable"
+      onclick="PopupMenu.doPopup(CourseItemList.Menus.getCourseItemHeadingMenu(document.getElementById('course-item-heading:{{item.id}}')), this)"
+      src="{% static 'shared/icons/more_vert.svg' %}" alt="popup icon"/>
+  </div>
 </li>

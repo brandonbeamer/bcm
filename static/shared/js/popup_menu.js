@@ -12,12 +12,16 @@
 // ]
 
 var PopupMenu = (function(){
-  function createMenu(data, elem) {
+  function createMenu(menu, elem) {
     elem.style.position = 'relative';
+
+    // let box = elem.getBoundingClientRect();
+    // let x = box.x + window.scrollX;
+    // let y = box.y + window.scrollY;
 
     let ul = document.createElement('ul');
 
-    for(let item of data) {
+    for(let item of menu) {
       let text = item[0];
       let callback = item[1];
       let li = null;
@@ -40,8 +44,8 @@ var PopupMenu = (function(){
 
   let self = {};
 
-  self.doPopup = function(data, elem) {
-    setTimeout(function(){createMenu(data, elem)}, 0);
+  self.doPopup = function(menu, elem) {
+    setTimeout(function(){createMenu(menu, elem)}, 0);
   }
 
   return self;
