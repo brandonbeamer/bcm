@@ -1,30 +1,30 @@
 {% extends 'shared/appview_base.html' %}
 {% load static %}
 
-{% block title_text %}{{course.name}} - {{view_name_pretty}}{% endblock %}
-{% block topbar_text %}{{course.name}} - {{view_name_pretty}}{% endblock %}
+{% block title_text %}{{course.name}} - {{page_name_pretty}}{% endblock %}
+{% block topbar_text %}{{course.name}} - {{page_name_pretty}}{% endblock %}
 
 
 {% block navbar_items %}
-  {% if view_name == 'course_items' %}
+  {% if page_name == 'course_items' %}
     <div>Materials</div>
   {% else %}
     <a href="{% url 'course_item_list' course_id=course.id %}">Materials</a>
   {% endif %}
 
-  {% if view_name == 'course_assignments' %}
+  {% if page_name == 'course_assignments' %}
     <div>Assignments</div>
   {% else %}
     <a href="{% url 'course_assignment_list' course_id=course.id %}">Assignments</a>
   {% endif %}
 
-  {% if view_name == 'course_gradebook' %}
+  {% if page_name == 'course_gradebook' %}
     <div>Gradebook</div>
   {% else %}
     <a href="{% url 'course_gradebook' course_id=course.id %}">Gradebook</a>
   {% endif %}
 
-  {% if view_name == 'course_settings' %}
+  {% if page_name == 'course_settings' %}
     <div>Course Settings</div>
   {% else %}
     <a href="{% url 'course_settings' course_id=course.id %}">Course Settings</a>
@@ -32,19 +32,19 @@
 {% endblock %}
 
 {% block navbar_drawer_items %}
-  {% if view_name != 'course_items' %}
+  {% if page_name != 'course_items' %}
     <a href="{% url 'course_item_list' course_id=course.id %}">Materials</a>
   {% endif %}
 
-  {% if view_name != 'course_assignments' %}
+  {% if page_name != 'course_assignments' %}
     <a href="{% url 'course_assignment_list' course_id=course.id %}">Assignments</a>
   {% endif %}
 
-  {% if view_name != 'course_gradebook' %}
+  {% if page_name != 'course_gradebook' %}
     <a href="{% url 'course_gradebook' course_id=course.id %}">Gradebook</a>
   {% endif %}
 
-  {% if view_name != 'course_settings' %}
+  {% if page_name != 'course_settings' %}
     <a href="{% url 'course_settings' course_id=course.id %}">Course Settings</a>
   {% endif %}
 

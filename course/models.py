@@ -147,7 +147,7 @@ class ModelWithContent(models.Model):
     """ Abstract model for representing the content (online-viewable) part of things that have it """
     CONTENT_TYPE_CHOICES = [
         (COURSEITEM_CONTENT_TYPE_URL, 'URL'),
-        (COURSEITEM_CONTENT_TYPE_PLAINTEXT, 'Plain Text'),
+        # (COURSEITEM_CONTENT_TYPE_PLAINTEXT, 'Plain Text'),
         (COURSEITEM_CONTENT_TYPE_MARKDOWN, 'Markdown-formatted Text')
     ]
 

@@ -49,17 +49,19 @@ html, body, .page, main {
   border-radius: 0.2em;
 }
 
-[type=submit] {
+input[type=submit] {
   background-color: var(--almost-white);
   color: var(--accent-color);
 }
 
-[type=submit]:hover {
+input[type=submit]:hover {
+  background-color: var(--almost-white);
+  color: var(--accent-color);
   box-shadow: 0 0 0.2em var(--almost-white);
 }
 
 @media only screen and (min-width: 1000px) {
-  body, input {
+  :root {
     font-size: var(--large-font-size);
   }
 }
@@ -119,7 +121,7 @@ html, body, .page, main {
   }
 }
 
-.error-notice {
+/* .error-notice {
   color: var(--almost-white);
   text-shadow: 0 0 0.5em var(--red-text);
-}
+} */

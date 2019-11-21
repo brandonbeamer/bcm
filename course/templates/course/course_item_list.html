@@ -5,6 +5,7 @@
 {% block head %}
   <link rel="stylesheet" href="{% static 'course/css/course_base.css' %}"/>
   <link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
+  <link rel="stylesheet" href="{% static 'course/css/course_item_list.css' %}"/>
   <link rel="stylesheet" href="{% static 'shared/css/popup_menu.css' %}"/>
   <link rel="stylesheet" href="{% static 'shared/css/modal_dialog.css' %}"/>
   <link rel="stylesheet" href="{% static 'shared/css/draggable.css' %}"/>
@@ -31,11 +32,11 @@
 
 {% if is_instructor %}
   <div class="align-right">
-    <button class='accent' onclick="window.location.href='{% url 'course_item_create' course_id=course.id%}'">
+    <button type="button" class='accent' onclick="window.location.href='{% url 'course_item_create' course_id=course.id%}'">
       <img class='icon' src="{% static 'shared/icons/add_white.svg' %}" alt="plus sign"/>
       Add Item
     </button>
-    <button onclick="CourseItemList.addHeadingStart()">Add Heading</button>
+    <button type="button" onclick="CourseItemList.addHeadingStart()">Add Heading</button>
   </div>
 
 {% endif %}

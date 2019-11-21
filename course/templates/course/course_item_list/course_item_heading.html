@@ -1,6 +1,8 @@
 {% load static %}
 {# template for CourseItem Headings #}
 
+{% if is_instructor or item.visible %}
+
 <li id="course-item-heading:{{item.id}}" class="course-item-heading draggable drag-target {% if not item.visible %}not-visible{% endif %}"
   data-item-id="{{item.id}}"
   data-item-visibility="{% if item.visible %}visible{% else %}hidden{% endif %}"
@@ -8,12 +10,18 @@
   data-drag-type='abovebelow'
   data-drag-target-selector='.course-item-heading'
   data-drag-ondrop=''>
+  {% if is_instructor %}
   <img class="drag-icon movable drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
+  {% endif %}
   <div class="item-heading-name">{{item.name}}</div>
+  {%  if is_instructor %}
   <div class="popup-container">
     <img
       class="item-heading-popup clickable"
       onclick="PopupMenu.doPopup(CourseItemList.Menus.getCourseItemHeadingMenu(document.getElementById('course-item-heading:{{item.id}}')), this)"
       src="{% static 'shared/icons/more_vert.svg' %}" alt="popup icon"/>
   </div>
+  {% endif %}
 </li>
+
+{% endif %}

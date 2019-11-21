@@ -54,11 +54,11 @@ var CourseItemList = (function(){
     let order = 1;
     let data = [];
     for(let item of items) {
-      let itemData = {};
-      if(item.classList.contains('course-item-heading'))
-        itemData.is_heading = 'on';
-      itemData.id = item.dataset.itemId;
-      itemData.order = order;
+      let itemData = {
+        id: item.dataset.itemId,
+        is_heading: item.classList.contains('course-item-heading'),
+        order: order,
+      };
 
       data.push(itemData);
       order++;
@@ -212,8 +212,7 @@ var CourseItemList = (function(){
 
     let action = ServerData.course_item_visible_update_inline_url;
 
-    let data = {id: elem.dataset.itemId};
-    if(visible) data['visible'] = 'on';
+    let data = {id: elem.dataset.itemId, visible: visible};
 
     let response = await postData(action, data);
     if(!response.ok) return;
@@ -227,8 +226,7 @@ var CourseItemList = (function(){
   async function updateCourseItemHeadingVisible(headingElem, visible) {
     if(isVisible(headingElem) === visible) return;
     let headingAction = ServerData.course_item_heading_visible_update_inline_url
-    let headingData = {id: headingElem.dataset.itemId};
-    if(visible) headingData['visible'] = 'on';
+    let headingData = {id: headingElem.dataset.itemId, visible: visible};
 
     let response = await postData(headingAction, headingData);
     if(!response.ok) return;
@@ -253,6 +251,9 @@ var CourseItemList = (function(){
         updateCourseItemHeadingVisible(getHeadingOfItem(elem), true);
       }]);
     }
+    menu.push(['Edit', function(){
+      window.location.href = elem.dataset.updateUrl;
+    }]);
     menu.push(['-']);
     menu.push(['Delete', () =>ModalDialog.confirmDialog(
       'Confirm Delete',
@@ -294,7 +295,6 @@ var CourseItemList = (function(){
       }]);
     return menu;
   }
-
 
   self.addHeadingStart = function() {
     ModalDialog.inputDialog(

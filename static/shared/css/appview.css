@@ -96,19 +96,6 @@ ul.container {
   list-style: none;
 }
 
-[type='button'] {
-  font-weight: bold;
-  background-color: lightgray;
-}
-
-button.accent {
-  background-color: var(--accent-color);
-  color: var(--almost-white);
-}
-
-button.accent:hover {
-  background-color: var(--accent-hl);
-}
 
 /* Layout specifics */
 

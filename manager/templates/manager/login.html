@@ -21,6 +21,9 @@
             {% csrf_token %}
             <h1>Login to BCM</h1>
             <p class="align-right">&hellip; or <a href="{% url 'signup' %}">create an account</a></p>
+            {% if form.non_field_errors %}
+            <p>Username or password wasn't correct.</p>
+            {% endif %}
             <div class="form-line">
               <label for="{{ form.username.id_for_label}}">Username:</label>
               {% render_field form.username autofocus='' placeholder='Username' %}
@@ -34,7 +37,7 @@
             </div>
 
             <div class="form-line align-right">
-              <input type="submit" name="" value="Login"/>
+              <input type="submit" value="Login"/>
             </div>
 
           </form>

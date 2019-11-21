@@ -16,11 +16,11 @@
 <h1>Enroll in a Course</h1>
   {% if already_enrolled %}
     <p>You are already a member of &ldquo;{{course.name}}&rdquo;. You can
-    <a href="{% url 'course_items' pk=course.id %}">view the course</a> right now if you like.</p>
+    <a href="{% url 'course_item_list' course_id=course.id %}">view the course</a> right now if you like.</p>
   {% else %}
     {% if success %}
       <p>Congratulations! You are now a member of &ldquo;{{course.name}}&rdquo;. You can
-        <a href="{% url 'course_items' pk=course.id %}">view the course</a> right now if you like.</p>
+        <a href="{% url 'course_item_list' course_id=course.id %}">view the course</a> right now if you like.</p>
     {% else %}
       <form action="{% url 'enroll' pk=course.id %}" method="post">
         {% csrf_token %}

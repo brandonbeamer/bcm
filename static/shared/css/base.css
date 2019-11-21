@@ -17,6 +17,7 @@
   --large-font-size: 15px;   /* larger for desktops */
   font-family: "Roboto", sans-serif;
   font-size: var(--default-font-size);
+
 }
 
 button, input, select, textarea {
@@ -57,19 +58,9 @@ h3 {
   margin-top: 1em;
 }
 
-p {
+p, ul {
   margin-top: 0.8em;
-  margin-bottom: 0.8em;
   line-height: 1.4em;
-}
-
-ul {
-  margin-bottom: 1em;
-  line-height: 1.4em;
-}
-
-li {
-  margin: 0.5em 0;
 }
 
 a {
@@ -146,7 +137,7 @@ button, [type=button] {
   box-shadow: 0 -0.1em 0.1em var(--almost-black) inset;
 }
 
-button:hover, [type=button]:hover {
+button:hover:not(:disabled), [type=button]:hover:not(:disabled) {
   background-color: var(--accent-shl);
 }
 
@@ -169,6 +160,15 @@ button:active, [type=button]:active {
 
 [type=submit]:active {
   box-shadow: 0 0.1em 0.1em var(--almost-black) inset;
+}
+
+button.accent {
+  background-color: var(--accent-color);
+  color: var(--almost-white);
+}
+
+button.accent:hover {
+  background-color: var(--accent-hl);
 }
 
 
@@ -285,4 +285,8 @@ button:active, [type=button]:active {
 
 .is-hidden {
   display: none !important;
+}
+
+.light-bottom-border {
+  border-bottom: 1px dotted gray;
 }

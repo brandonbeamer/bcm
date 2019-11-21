@@ -3,6 +3,8 @@
 
 {% load static %}
 
+{% if is_instructor or item.visible %}
+
 <li id="course-item:{{item.id}}" class="course-item draggable drag-target {% if not item.visible %}not-visible{%  endif %}"
   data-item-id="{{item.id}}"
   data-item-visibility="{% if item.visible %}visible{% else %}hidden{% endif %}"
@@ -10,7 +12,9 @@
   data-drag-type='abovebelow'
   data-drag-target-selector='.course-item, .course-item-heading'>
   <div class="grid-drag">
+    {% if is_instructor %}
     <img class="drag-icon drag-hotspot" src="{% static 'shared/icons/drag_indicator.svg' %}" alt="drag icon"/>
+    {% endif %}
   </div>
 
   <div class="grid-icon">
@@ -37,12 +41,16 @@
     {{ item.description }}
   </div>
   <div class="grid-popup">
+    {% if is_instructor %}
     <div class="popup-container">
     <img
       class="item-popup clickable grid-popup"
       onclick="PopupMenu.doPopup(CourseItemList.Menus.getCourseItemMenu(document.getElementById('course-item:{{item.id}}')),this)"
       src="{% static 'shared/icons/more_vert.svg' %}" alt="popup icon"/>
     </div>
+    {% endif %}
   </div>
 
 </li>
+
+{% endif %}

@@ -14,7 +14,7 @@ from .models import GeneralCourseItem, ItemHeading
 #         model = ItemHeading
 #         fields = ['name']
 
-class GeneralCourseItemCreateForm(ModelForm):
+class GeneralCourseItemForm(ModelForm):
     class Meta:
         model = GeneralCourseItem
         fields = [
@@ -46,3 +46,6 @@ class ItemIdForm(Form):
 class IdVisibleForm(Form):
     id = forms.IntegerField()
     visible = forms.BooleanField(required = False)
+
+class TextForm(Form):
+    text = forms.CharField()
