@@ -1,0 +1,40 @@
+main .form-area, main .preview-area {
+  padding: 1em;
+}
+
+@media only screen and (max-width: 799px) {
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 40em;
+    margin: 0 auto;
+  }
+
+}
+
+@media only screen and (min-width: 800px) {
+  main {
+    display: flex;
+    justify-content: center;
+  }
+
+  main .form-area {
+    flex: 0 1 40em;
+  }
+
+  main .preview-area {
+    flex: 0 2 40em;
+  }
+}
+
+.preview-container {
+  margin-top: 1em;
+  padding: 0.5em;
+  border: 1px dashed lightgray;
+}
+
+.preview-container.empty {
+  text-align: center;
+  color: gray;
+}

@@ -1,0 +1,15 @@
+{% extends 'course/course_base.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'course/css/course_base.css' %}"/>
+  <link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
+  <link rel="stylesheet" href="{% static 'course/css/course_item_list.css' %}"/>
+{% endblock %}
+
+{% block main_content %}
+<h1 class="light-bottom-border">{{object.name}}</h1>
+
+{{cooked_content|safe}}
+
+{% endblock %}

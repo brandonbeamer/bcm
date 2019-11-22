@@ -1,0 +1,116 @@
+{% extends 'course/course_base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'course/css/course_base.css' %}"/>
+  <link rel="stylesheet" href="{% static 'course/css/course_item_update.css' %}"/>
+  <script src="{% static 'shared/js/js.cookie.js' %}" defer></script>
+  <script src="{% static 'shared/js/server_data.js' %}" defer></script>
+  <script src="{% static 'shared/js/server_post.js' %}" defer></script>
+  <script src="{% static 'course/js/course_item_update.js' %}" defer></script>
+  <script>
+    const SERVER_DATA_JSON = "{{SERVER_DATA_JSON|escapejs}}";
+  </script>
+{% endblock %}
+
+{% block main_content %}
+  <div class="form-area">
+    {% if object %}
+      <h1>Edit Course Item</h1>
+    {% else %}
+      <h1>Create Course Item</h1>
+    {% endif %}
+
+    <form action="{{form_action}}" method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <div style="display:flex; flex-wrap: wrap">
+
+        <div class="form-line" style="margin-right: 1em">
+          <label for="{{form.name.id_for_label}}">Name:
+            {% with drawer_id=form.name.id_for_label %}
+            {% include 'shared/include/help_icon.html' %}
+            {% endwith%}
+          </label>
+          <div class="drawer help" data-drawer-id="{{form.name.id_for_label}}">
+            {{form.name.help_text}}
+          </div>
+          {% render_field form.name autofocus='' %}
+          {{ form.name.errors }}
+        </div>
+
+        <div class="form-line">
+          <label for="{{form.visible.id_for_label}}">Visible by Students:
+            {% with drawer_id=form.visible.id_for_label %}
+            {% include 'shared/include/help_icon.html' %}
+            {% endwith%}</label>
+            <div class="drawer help" data-drawer-id="{{form.visible.id_for_label}}">
+              {{form.visible.help_text}}
+            </div>
+            {% render_field form.visible %}
+            {{ form.visible.errors }}
+        </div>
+      </div>
+
+      <div class="form-line">
+        <label for="{{form.description.id_for_label}}">Description:
+          {% with drawer_id=form.description.id_for_label %}
+          {% include 'shared/include/help_icon.html' %}
+          {% endwith%}</label>
+          <div class="drawer help" data-drawer-id="{{form.description.id_for_label}}">
+            {{form.description.help_text}}
+          </div>
+          {% render_field form.description style="width: 100%" %}
+          {{ form.description.errors }}
+      </div>
+
+        <div class="form-line">
+          <label for="{{form.content_type.id_for_label}}">Type:</label>
+          <div style="display:flex; flex-wrap: wrap;align-items:center;justify-content:space-between;">
+            <div>
+              {% render_field form.content_type onchange="CourseItemUpdate.updateSelect(this)" %}
+              {{ form.content_type.errors }}
+            </div>
+            <div class="markdown-only">
+              <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">View the markdown cheat sheet</a>
+            </div>
+          </div>
+        </div>
+
+
+
+      <div id="id_url_content_div" class="form-line">
+        <label for="{{form.url_content.id_for_label}}">URL:</label>
+        {% render_field form.url_content %}
+        {{ form.url_content.errors }}
+      </div>
+
+      <div id="id_text_content_div" class="form-line">
+
+        <label for="{{form.text_content.id_for_label}}">Item Content:</label>
+        {% render_field form.text_content %}
+        {{ form.text_content.errors }}
+      </div>
+
+      <div class="form-line align-right">
+        {% if object %}
+          <input type="submit" value="Save Changes"/>
+        {% else %}
+          <input type="submit" value="Create Course Item"/>
+        {% endif %}
+        <button type="button" class="markdown-only" id="id_preview_button" onclick="CourseItemUpdate.getRenderedMarkdown()">Preview</button>
+        <button type="button" onclick="window.location.href = '{% url 'course_item_list' course_id=course.id %}'">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <div id='id_preview_area' class="preview-area markdown-only">
+    <h2>Preview</h2>
+    <div id="id_preview_container" class="preview-container">
+
+    </div>
+  </div>
+
+{% endblock %}
