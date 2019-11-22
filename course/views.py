@@ -14,9 +14,9 @@ import bleach
 
 # from json import dumps
 
-from .models import Course, Enrollment, GeneralCourseItem, ItemHeading
+from .models import Course, Enrollment, CourseItem, ItemHeading
 from .models import COURSEITEM_CONTENT_TYPE_MARKDOWN, COURSEITEM_CONTENT_TYPE_PLAINTEXT
-from .forms import GeneralCourseItemForm, ItemHeadingCreateInlineForm, ItemOrderUpdateInlineForm
+from .forms import CourseItemForm, ItemHeadingCreateInlineForm, ItemOrderUpdateInlineForm
 from .forms import ItemIdForm, IdVisibleForm, TextForm
 
 # User is member of course test
@@ -100,7 +100,7 @@ class CourseItemListView(EnrolledBaseView):
     def get(self, request, **kwargs):
         self.context.update({
             **self.get_base_context(kwargs),
-            'item_list': self.course.get_general_course_item_list(),
+            'item_list': self.course.get_course_item_list(),
         })
         self.context['SERVER_DATA_JSON'] = json.dumps({
             'course_item_heading_create_inline_url': reverse('course_item_heading_create_inline', kwargs = {'course_id': self.course.id}),
@@ -118,13 +118,16 @@ class CourseItemListView(EnrolledBaseView):
 
 class CourseItemCreateView(InstructorBaseView):
     template_name = "course/course_item_update.html"
-    form = GeneralCourseItemForm
+    form = CourseItemForm
     # create_heading_form = OptionalCreateItemHeadingForm
     def get_base_context(self):
         return {
             'page_name': 'create_courseitem',
             'page_name_pretty': 'Create Course Item',
             'form_action': reverse('course_item_create', kwargs={'course_id': self.course.id}),
+            'SERVER_DATA_JSON': json.dumps({
+                'markdown_preview_url': reverse('markdown_preview'),
+            }),
         }
 
     def get(self, request, **kwargs):
@@ -156,7 +159,7 @@ class CourseItemCreateView(InstructorBaseView):
             obj = form.save(commit = False)
             # if new_category:
             #     obj.category = newcat
-            # max_order = GeneralCourseItem.objects.filter(course = self.course, category = obj.category).aggregate(Max('order')).get('order__max')
+            # max_order = CourseItem.objects.filter(course = self.course, category = obj.category).aggregate(Max('order')).get('order__max')
             # obj.order = 0 if max_order is None else max_order + 1
             obj.course = self.course
 
@@ -168,7 +171,7 @@ class CourseItemCreateView(InstructorBaseView):
 class CourseItemDetailView(EnrolledBaseView):
     template_name = "course/course_item_detail.html"
     def get(self, request, **kwargs):
-        object = get_object_or_404(GeneralCourseItem, course = self.course, id=kwargs['item_id'])
+        object = get_object_or_404(CourseItem, course = self.course, id=kwargs['item_id'])
         cooked_content = None
         if object.content_type == COURSEITEM_CONTENT_TYPE_MARKDOWN:
             cooked_content = render_markdown(object.text_content)
@@ -182,7 +185,7 @@ class CourseItemDetailView(EnrolledBaseView):
 
 class CourseItemUpdateView(InstructorBaseView):
     template_name = "course/course_item_update.html"
-    form_class = GeneralCourseItemForm
+    form_class = CourseItemForm
     def get_base_context(self, kwargs):
         return {
             'page_name_pretty': 'Update Course Item',
@@ -193,7 +196,7 @@ class CourseItemUpdateView(InstructorBaseView):
         }
 
     def get(self, request, **kwargs):
-        object = get_object_or_404(GeneralCourseItem, course=self.course, id=kwargs['item_id'])
+        object = get_object_or_404(CourseItem, course=self.course, id=kwargs['item_id'])
         form = self.form_class(instance = object)
         self.context.update({
             **self.get_base_context(kwargs),
@@ -203,7 +206,7 @@ class CourseItemUpdateView(InstructorBaseView):
         return render(request, self.template_name, self.context)
 
     def post(self, request, **kwargs):
-        object = get_object_or_404(GeneralCourseItem, course=self.course, id=kwargs['item_id'])
+        object = get_object_or_404(CourseItem, course=self.course, id=kwargs['item_id'])
         form = self.form_class(instance = object, data=request.POST)
         self.context.update({
             **self.get_base_context(kwargs),
@@ -227,7 +230,7 @@ class CourseItemOrderUpdateInlineView(InstructorBaseView):
             return HttpResponseBadRequest();
 
         for form in formset:
-            object_class = ItemHeading if form.cleaned_data['is_heading'] else GeneralCourseItem
+            object_class = ItemHeading if form.cleaned_data['is_heading'] else CourseItem
             object = get_object_or_404(object_class, course=self.course, id=form.cleaned_data['id'])
             object.order = form.cleaned_data['order']
             object.save()
@@ -242,7 +245,7 @@ class CourseItemVisibleUpdateInlineView(InstructorBaseView):
         if not form.is_valid():
             return HttpResponseBadRequest();
 
-        object = get_object_or_404(GeneralCourseItem, course=self.course, id=form.cleaned_data['id'])
+        object = get_object_or_404(CourseItem, course=self.course, id=form.cleaned_data['id'])
         object.visible = form.cleaned_data['visible']
         object.save()
         self.context.update({'item': object})
@@ -256,7 +259,7 @@ class CourseItemDeleteInlineView(InstructorBaseView):
         if not form.is_valid():
             return HttpResponseBadRequest();
 
-        obj = get_object_or_404(GeneralCourseItem, course=self.course, id=form.cleaned_data['id'])
+        obj = get_object_or_404(CourseItem, course=self.course, id=form.cleaned_data['id'])
         obj.delete()
         return HttpResponse();
 
@@ -270,7 +273,7 @@ class CourseItemDeleteSetInlineView(InstructorBaseView):
             return HttpResponseBadRequest();
 
         for f in formset:
-            obj = get_object_or_404(GeneralCourseItem, course=self.course, id=f.cleaned_data['id'])
+            obj = get_object_or_404(CourseItem, course=self.course, id=f.cleaned_data['id'])
             obj.delete()
 
         return HttpResponse();
@@ -289,7 +292,7 @@ class CourseItemHeadingCreateInlineView(InstructorBaseView):
         obj = form.save(commit = False)
         obj.course = self.course
         obj.save()
-        self.context.update({'item_list': self.course.get_general_course_item_list()})
+        self.context.update({'item_list': self.course.get_course_item_list()})
         return render(request, self.template_name, self.context)
 
 class CourseItemHeadingDeleteInlineView(InstructorBaseView):

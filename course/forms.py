@@ -3,7 +3,7 @@ from django.forms import ModelForm, Form
 from django.forms.widgets import TextInput
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from .models import GeneralCourseItem, ItemHeading
+from .models import CourseItem, ItemHeading
 
 # class OptionalCreateItemHeadingForm(ModelForm):
 #     def __init__(self, *args, **kwargs):
@@ -14,9 +14,9 @@ from .models import GeneralCourseItem, ItemHeading
 #         model = ItemHeading
 #         fields = ['name']
 
-class GeneralCourseItemForm(ModelForm):
+class CourseItemForm(ModelForm):
     class Meta:
-        model = GeneralCourseItem
+        model = CourseItem
         fields = [
             'content_type',
             'url_content',

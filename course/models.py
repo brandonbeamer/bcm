@@ -37,9 +37,9 @@ class Course(models.Model):
     members = models.ManyToManyField(User, through = 'Enrollment',
         through_fields = ('course', 'user'))
 
-    def get_general_course_item_list(self):
+    def get_course_item_list(self):
         """ Returns general items and headings, sorted """
-        item_list = self.generalcourseitem_set.all()
+        item_list = self.courseitem_set.all()
         heading_list = self.itemheading_set.all()
         return sorted(list(item_list) + list(heading_list), key=lambda x: (x.order, -x.created_at.timestamp()))
 
@@ -97,34 +97,8 @@ class Attendance(models.Model):
     def __str__(self):
         return f"{self.user}'s was {self.status}"
 
-# class ItemCategory(models.Model):
-#     """ Category of Course Items """
-#     ASSIGNMENT = 'A'
-#     GENERAL = 'G'
-#     TYPE_CHOICES = [(ASSIGNMENT, 'Assignment'), (GENERAL, 'General')]
-#     type = models.CharField(max_length = 1, choices = TYPE_CHOICES)
-#     course = models.ForeignKey(Course, on_delete = models.CASCADE)
-#     name   = models.CharField(max_length = 30)
-#     # order  = models.SmallIntegerField()
-#     class Meta:
-#         ordering = ['course', 'type', 'name']
-#         # constraints = [
-#         #     models.UniqueConstraint(fields = ['course', 'type', 'order'], name = 'unique_item_categories')
-#         # ]
-#     # def __repr__(self):
-#     #     return f"{self.id}:{self.name}"
-#
-#     def __str__(self):
-#         return f"{self.name}"
-
-# ITEMHEADING_TYPE_ASSIGNMENT = 'A'
-# ITEMHEADING_TYPE_GENERAL = 'G'
 class ItemHeading(models.Model):
     """ Headings that appear on course item pages """
-    # TYPE_CHOICES = [
-    #     (ITEMHEADING_TYPE_GENERAL, 'General'),
-    #     (ITEMHEADING_TYPE_ASSIGNMENT, 'Assignment'),
-    # ]
 
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     # type = models.CharField(max_length = 1, choices = TYPE_CHOICES, default = ITEMHEADING_TYPE_GENERAL)
@@ -139,12 +113,17 @@ class ItemHeading(models.Model):
     class Meta:
         ordering = ['course']
 
-
 COURSEITEM_CONTENT_TYPE_URL = 'U'
 COURSEITEM_CONTENT_TYPE_PLAINTEXT = 'T'
 COURSEITEM_CONTENT_TYPE_MARKDOWN = 'M'
-class ModelWithContent(models.Model):
-    """ Abstract model for representing the content (online-viewable) part of things that have it """
+class CourseItem(models.Model):
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    name = models.CharField(max_length = 50, help_text = "The name or title of the course item")
+    description = models.CharField(max_length = 300, blank = True, help_text = "A short description of the course item")
+    visible = models.BooleanField(default = True, help_text = "Whether students can see the course item")
+    order = models.SmallIntegerField(default = 0)
+    created_at = models.DateTimeField(auto_now_add = True)
+
     CONTENT_TYPE_CHOICES = [
         (COURSEITEM_CONTENT_TYPE_URL, 'URL'),
         # (COURSEITEM_CONTENT_TYPE_PLAINTEXT, 'Plain Text'),
@@ -156,29 +135,10 @@ class ModelWithContent(models.Model):
     url_content = models.URLField(blank = True, max_length = 200)
     text_content = models.TextField(blank = True)
 
-    class Meta:
-        abstract = True
-
-class CourseItem(ModelWithContent):
-    """ Abstract model for viewable content on course website """
-
-    course = models.ForeignKey(Course, on_delete = models.CASCADE)
-    name = models.CharField(max_length = 50, help_text = "The name or title of the course item")
-    description = models.CharField(max_length = 300, blank = True, help_text = "A short description of the course item")
-    visible = models.BooleanField(default = True, help_text = "Whether students can see the course item")
-    order = models.SmallIntegerField(default = 0)
-    created_at = models.DateTimeField(auto_now_add = True)
-
     # All the content-related stuff is inherited
-
-    class Meta:
-        abstract = True
-
     def __str__(self):
         return self.name
 
-class GeneralCourseItem(CourseItem):
-    # No other fields for a general item
     def get_absolute_url(self):
         return reverse('course_item_detail', kwargs={
             'course_id': self.course.id,
@@ -187,12 +147,19 @@ class GeneralCourseItem(CourseItem):
 
     class Meta:
         ordering = ['course']
-        pass
 
 
-class Assignment(CourseItem):
+class Assignment(models.Model):
     """ A task that students of a given course are expected to complete """
-    # All fields of CourseItem are inherited; everything you need to display instructions
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    name = models.CharField(max_length = 50, help_text = "The name or title of the course item")
+    description = models.CharField(max_length = 300, blank = True, help_text = "A short description of the course item")
+    visible = models.BooleanField(default = True, help_text = "Whether students can see the course item")
+
+    created_at = models.DateTimeField(auto_now_add = True)
+    text_content = models.TextField(blank = True)
+
+
     OPEN = 'O'
     CLOSED = 'C'
     SCHEDULED = 'S'
@@ -203,9 +170,10 @@ class Assignment(CourseItem):
     closes_at = models.DateTimeField(help_text="When 'open' is set to 'Scheduled', datetime at which submissions (and their revisions) are no longer accepted")
     due_at = models.DateTimeField(help_text = "Datetime at which submissions become 'late'")
 
-    # __str__ defined in parent class
+    def __str__(self):
+        return self.name
 
-    class Meta(CourseItem.Meta):
+    class Meta:
         ordering = ['course', '-due_at']
 
 class Evaluation(models.Model):
@@ -220,7 +188,7 @@ class Evaluation(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-class Submission(ModelWithContent):
+class Submission(models.Model):
     """ A student's submission for an assignment """
 
     # Content-related stuff is inherited
