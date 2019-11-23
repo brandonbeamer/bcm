@@ -5,7 +5,7 @@
 {% block head %}
   <link rel="stylesheet" href="{% static 'course/css/course_base.css' %}"/>
   <link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
-  <link rel="stylesheet" href="{% static 'course/css/course_item_list.css' %}"/>
+  <link rel="stylesheet" href="{% static 'course/css/courseitem_list.css' %}"/>
   <link rel="stylesheet" href="{% static 'shared/css/popup_menu.css' %}"/>
   <link rel="stylesheet" href="{% static 'shared/css/modal_dialog.css' %}"/>
   <link rel="stylesheet" href="{% static 'shared/css/draggable.css' %}"/>
@@ -16,7 +16,7 @@
   <script src="{% static 'shared/js/server_status.js' %}" defer></script>
   <script src="{% static 'shared/js/modal_dialog.js' %}" defer></script>
   <script src="{% static 'shared/js/draggable.js' %}" defer></script>
-  <script src="{% static 'course/js/course_item_list.js' %}" defer></script>
+  <script src="{% static 'course/js/courseitem_list.js' %}" defer></script>
 
   <script>
       const SERVER_DATA_JSON = "{{SERVER_DATA_JSON|escapejs}}";
@@ -32,7 +32,7 @@
 
 {% if is_instructor %}
   <div class="align-right">
-    <button type="button" class='accent' onclick="window.location.href='{% url 'course_item_create' course_id=course.id%}'">
+    <button type="button" class='accent' onclick="window.location.href='{% url 'courseitem_create' course_id=course.id%}'">
       <img class='icon' src="{% static 'shared/icons/add_white.svg' %}" alt="plus sign"/>
       Add Item
     </button>
@@ -42,7 +42,7 @@
 {% endif %}
 
 <ul class="item-list">
-  {% include 'course/course_item_list/item_list.html' %}
+  {% include 'course/courseitem_list/item_list.html' %}
 </ul>
 
 {% endblock %}

@@ -9,7 +9,7 @@
   {% if page_name == 'course_items' %}
     <div>Materials</div>
   {% else %}
-    <a href="{% url 'course_item_list' course_id=course.id %}">Materials</a>
+    <a href="{% url 'courseitem_list' course_id=course.id %}">Materials</a>
   {% endif %}
 
   {% if page_name == 'course_assignments' %}
@@ -33,7 +33,7 @@
 
 {% block navbar_drawer_items %}
   {% if page_name != 'course_items' %}
-    <a href="{% url 'course_item_list' course_id=course.id %}">Materials</a>
+    <a href="{% url 'courseitem_list' course_id=course.id %}">Materials</a>
   {% endif %}
 
   {% if page_name != 'course_assignments' %}

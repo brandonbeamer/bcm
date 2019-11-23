@@ -32,7 +32,7 @@ var CourseItemList = (function(){
   }
 
   async function addHeading(name) {
-    let action = ServerData.course_item_heading_create_inline_url
+    let action = ServerData.courseitem_heading_create_inline_url
 
     let response = await postData(action, {'name': name});
     if(!response.ok) return;
@@ -64,7 +64,7 @@ var CourseItemList = (function(){
       order++;
 
     }
-    let action = ServerData.course_item_order_update_inline_url
+    let action = ServerData.courseitem_order_update_inline_url
     let response = await postData(action, data);
     if(!response.ok) {
       ServerStatus.error("Couldn't update item order :(");
@@ -158,7 +158,7 @@ var CourseItemList = (function(){
   }
 
   async function deleteCourseItem(elem) {
-    let action = ServerData.course_item_delete_inline_url;
+    let action = ServerData.courseitem_delete_inline_url;
     elem.classList.add('pending-delete');
 
     let response = await postData(action, {id: elem.dataset.itemId});
@@ -172,7 +172,7 @@ var CourseItemList = (function(){
   }
 
   async function deleteManyCourseItems(itemArray) {
-    let action = ServerData.course_item_delete_set_inline_url;
+    let action = ServerData.courseitem_delete_set_inline_url;
     for(let e of itemArray){
       e.classList.add('pending-delete');
     }
@@ -193,7 +193,7 @@ var CourseItemList = (function(){
   }
 
   async function deleteCourseItemHeading(elem) {
-    let action = ServerData.course_item_heading_delete_inline_url;
+    let action = ServerData.courseitem_heading_delete_inline_url;
 
     elem.classList.add('pending-delete');
 
@@ -210,7 +210,7 @@ var CourseItemList = (function(){
   async function updateCourseItemVisible(elem, visible) {
     if(isVisible(elem) === visible) return;
 
-    let action = ServerData.course_item_visible_update_inline_url;
+    let action = ServerData.courseitem_visible_update_inline_url;
 
     let data = {id: elem.dataset.itemId, visible: visible};
 
@@ -225,7 +225,7 @@ var CourseItemList = (function(){
 
   async function updateCourseItemHeadingVisible(headingElem, visible) {
     if(isVisible(headingElem) === visible) return;
-    let headingAction = ServerData.course_item_heading_visible_update_inline_url
+    let headingAction = ServerData.courseitem_heading_visible_update_inline_url
     let headingData = {id: headingElem.dataset.itemId, visible: visible};
 
     let response = await postData(headingAction, headingData);
@@ -258,7 +258,7 @@ var CourseItemList = (function(){
     menu.push(['Delete', () =>ModalDialog.confirmDialog(
       'Confirm Delete',
       'Are you sure you want to delete this course item?',
-      () => deleteCourseItem(elem)
+      (ok) => {if(ok) deleteCourseItem(elem)}
     )]);
     return menu;
   };
@@ -288,7 +288,8 @@ var CourseItemList = (function(){
       ModalDialog.confirmDialog(
         'Confirm Delete',
         `You are about to permanently delete a course heading as well as ${items.length} item(s) under it. Are you sure about this?`,
-        () => {
+        (ok) => {
+          if(!ok) return;
           deleteManyCourseItems(items);
           deleteCourseItemHeading(elem);
         })
@@ -308,9 +309,9 @@ var CourseItemList = (function(){
           setTimeout(() => ModalDialog.confirmDialog(
             ':(', 'Headings need to include a non-whitespace character.'
           ), 0)
+        }else{
+          addHeading(result);
         }
-        addHeading(result);
-        // setTimeout(() => addHeading(result), 0);
       }
     );
   }

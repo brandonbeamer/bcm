@@ -1,11 +1,11 @@
-{# The item list portion of course_item_list.html #}
+{# The item list portion of courseitem_list.html #}
 {# Context should have 'item_list' set to a list of items #}
 
 {% for item in item_list %}
   {% if item.is_heading %}
-    {% include 'course/course_item_list/course_item_heading.html' %}
+    {% include 'course/courseitem_list/courseitem_heading.html' %}
   {% else %}
-    {% include 'course/course_item_list/course_item.html' %}
+    {% include 'course/courseitem_list/courseitem.html' %}
   {% endif %}
 {% empty %}
   <p>There are no course items.</p>

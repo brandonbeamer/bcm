@@ -89,42 +89,50 @@ class EnrolledBaseView(LoginRequiredMixin, UserPassesTestMixin, CourseBaseView):
 class InstructorBaseView(LoginRequiredMixin, UserPassesTestMixin, CourseBaseView):
     test_func = verify_instructor
 
+class MarkdownPreviewView(LoginRequiredMixin, View):
+    def post(self, request):
+        form = TextForm(request.POST)
+        if not form.is_valid():
+            return HttpResponseBadRequest()
+
+        return HttpResponse(render_markdown(form.cleaned_data['text']))
+
 class CourseItemListView(EnrolledBaseView):
-    template_name = "course/course_item_list.html"
+    template_name = "course/courseitem_list.html"
     def get_base_context(self, kwargs):
         return {
-            'page_name': 'course_items',
+            'page_name': 'courseitems',
             'page_name_pretty': 'Materials',
         }
 
     def get(self, request, **kwargs):
         self.context.update({
             **self.get_base_context(kwargs),
-            'item_list': self.course.get_course_item_list(),
+            'item_list': self.course.get_courseitem_list(),
         })
         self.context['SERVER_DATA_JSON'] = json.dumps({
-            'course_item_heading_create_inline_url': reverse('course_item_heading_create_inline', kwargs = {'course_id': self.course.id}),
-            'course_item_heading_delete_inline_url': reverse('course_item_heading_delete_inline', kwargs = {'course_id': self.course.id}),
-            'course_item_heading_visible_update_inline_url': reverse('course_item_heading_visible_update_inline', kwargs = {'course_id': self.course.id}),
-            'course_item_order_update_inline_url': reverse('course_item_order_update_inline', kwargs = {'course_id': self.course.id}),
-            'course_item_delete_inline_url': reverse('course_item_delete_inline', kwargs = {'course_id': self.course.id}),
-            'course_item_delete_set_inline_url': reverse('course_item_delete_set_inline', kwargs = {'course_id': self.course.id}),
-            'course_item_visible_update_inline_url': reverse('course_item_visible_update_inline', kwargs = {'course_id': self.course.id}),
-            # 'course_item_set_visible_update_inline_url': reverse('course_item_set_visible_update_inline', kwargs = {'course_id': self.course.id}),
+            'courseitem_heading_create_inline_url': reverse('courseitem_heading_create_inline', kwargs = {'course_id': self.course.id}),
+            'courseitem_heading_delete_inline_url': reverse('courseitem_heading_delete_inline', kwargs = {'course_id': self.course.id}),
+            'courseitem_heading_visible_update_inline_url': reverse('courseitem_heading_visible_update_inline', kwargs = {'course_id': self.course.id}),
+            'courseitem_order_update_inline_url': reverse('courseitem_order_update_inline', kwargs = {'course_id': self.course.id}),
+            'courseitem_delete_inline_url': reverse('courseitem_delete_inline', kwargs = {'course_id': self.course.id}),
+            'courseitem_delete_set_inline_url': reverse('courseitem_delete_set_inline', kwargs = {'course_id': self.course.id}),
+            'courseitem_visible_update_inline_url': reverse('courseitem_visible_update_inline', kwargs = {'course_id': self.course.id}),
+            # 'courseitem_set_visible_update_inline_url': reverse('courseitem_set_visible_update_inline', kwargs = {'course_id': self.course.id}),
 
         })
 
         return render(request, self.template_name, self.context)
 
 class CourseItemCreateView(InstructorBaseView):
-    template_name = "course/course_item_update.html"
+    template_name = "course/courseitem_update.html"
     form = CourseItemForm
     # create_heading_form = OptionalCreateItemHeadingForm
     def get_base_context(self):
         return {
             'page_name': 'create_courseitem',
             'page_name_pretty': 'Create Course Item',
-            'form_action': reverse('course_item_create', kwargs={'course_id': self.course.id}),
+            'form_action': reverse('courseitem_create', kwargs={'course_id': self.course.id}),
             'SERVER_DATA_JSON': json.dumps({
                 'markdown_preview_url': reverse('markdown_preview'),
             }),
@@ -164,12 +172,12 @@ class CourseItemCreateView(InstructorBaseView):
             obj.course = self.course
 
             obj.save()
-            return HttpResponseRedirect(reverse('course_item_list', kwargs={'course_id': self.course.id}))
+            return HttpResponseRedirect(reverse('courseitem_list', kwargs={'course_id': self.course.id}))
 
         return render(request, self.template_name, self.context)
 
 class CourseItemDetailView(EnrolledBaseView):
-    template_name = "course/course_item_detail.html"
+    template_name = "course/courseitem_detail.html"
     def get(self, request, **kwargs):
         object = get_object_or_404(CourseItem, course = self.course, id=kwargs['item_id'])
         cooked_content = None
@@ -184,12 +192,12 @@ class CourseItemDetailView(EnrolledBaseView):
         return render(request, self.template_name, self.context)
 
 class CourseItemUpdateView(InstructorBaseView):
-    template_name = "course/course_item_update.html"
+    template_name = "course/courseitem_update.html"
     form_class = CourseItemForm
     def get_base_context(self, kwargs):
         return {
             'page_name_pretty': 'Update Course Item',
-            'form_action': reverse('course_item_update', kwargs={'course_id': self.course.id, 'item_id': kwargs['item_id']}),
+            'form_action': reverse('courseitem_update', kwargs={'course_id': self.course.id, 'item_id': kwargs['item_id']}),
             'SERVER_DATA_JSON': json.dumps({
                 'markdown_preview_url': reverse('markdown_preview'),
             }),
@@ -216,7 +224,7 @@ class CourseItemUpdateView(InstructorBaseView):
         if not form.is_valid():
             return render(request. self.template_name, self.context)
         form.save()
-        return HttpResponseRedirect(reverse('course_item_list', kwargs={'course_id': self.course.id}))
+        return HttpResponseRedirect(reverse('courseitem_list', kwargs={'course_id': self.course.id}))
 
 class CourseItemOrderUpdateInlineView(InstructorBaseView):
     # No template, it either goes through or doesn't
@@ -238,7 +246,7 @@ class CourseItemOrderUpdateInlineView(InstructorBaseView):
         return HttpResponse();
 
 class CourseItemVisibleUpdateInlineView(InstructorBaseView):
-    template_name = "course/course_item_list/course_item.html"
+    template_name = "course/courseitem_list/courseitem.html"
     form_class = IdVisibleForm
     def post(self, request, **kwargs):
         form = self.form_class(request.POST)
@@ -282,7 +290,7 @@ class CourseItemHeadingCreateInlineView(InstructorBaseView):
     """
     Called from client script, creates a heading and returns an updated item list
     """
-    template_name = "course/course_item_list/item_list.html"
+    template_name = "course/courseitem_list/item_list.html"
     form_class = ItemHeadingCreateInlineForm
 
     def post(self, request, *args, **kwargs):
@@ -292,7 +300,7 @@ class CourseItemHeadingCreateInlineView(InstructorBaseView):
         obj = form.save(commit = False)
         obj.course = self.course
         obj.save()
-        self.context.update({'item_list': self.course.get_course_item_list()})
+        self.context.update({'item_list': self.course.get_courseitem_list()})
         return render(request, self.template_name, self.context)
 
 class CourseItemHeadingDeleteInlineView(InstructorBaseView):
@@ -307,7 +315,7 @@ class CourseItemHeadingDeleteInlineView(InstructorBaseView):
         return HttpResponse();
 
 class CourseItemHeadingVisibleUpdateInlineView(InstructorBaseView):
-    template_name = "course/course_item_list/course_item_heading.html"
+    template_name = "course/courseitem_list/courseitem_heading.html"
     form_class = IdVisibleForm
     def post(self, request, **kwargs):
         form = self.form_class(request.POST)
@@ -320,19 +328,20 @@ class CourseItemHeadingVisibleUpdateInlineView(InstructorBaseView):
         self.context.update({'item': object})
         return render(request, self.template_name, self.context)
 
-class MarkdownPreviewView(LoginRequiredMixin, View):
-    def post(self, request):
-        form = TextForm(request.POST)
-        if not form.is_valid():
-            return HttpResponseBadRequest()
-
-        return HttpResponse(render_markdown(form.cleaned_data['text']))
+class RollCallListView(InstructorBaseView):
+    template_name = 'course/rollcall_list.html'
+    def get_base_context(self):
+        return {
+            'page_name': 'attendance',
+            'page_name_pretty': 'Attendance'
+        }
+    pass
 
 class AssignmentListView(TemplateView):
-    template_name = "course/course_item_list.html"
+    template_name = "course/courseitem_list.html"
 
 class GradebookView(TemplateView):
-    template_name = "course/course_item_list.html"
+    template_name = "course/courseitem_list.html"
 
 class CourseSettingsView(TemplateView):
-    template_name = "course/course_item_list.html"
+    template_name = "course/courseitem_list.html"

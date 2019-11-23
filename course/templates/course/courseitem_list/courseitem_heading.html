@@ -6,7 +6,7 @@
 <li id="course-item-heading:{{item.id}}" class="course-item-heading draggable drag-target {% if not item.visible %}not-visible{% endif %}"
   data-item-id="{{item.id}}"
   data-item-visibility="{% if item.visible %}visible{% else %}hidden{% endif %}"
-  data-update-url="{% url 'course_item_update' course_id=course.id item_id=item.id%}"
+  data-update-url="{% url 'courseitem_update' course_id=course.id item_id=item.id%}"
   data-drag-type='abovebelow'
   data-drag-target-selector='.course-item-heading'
   data-drag-ondrop=''>

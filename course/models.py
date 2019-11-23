@@ -37,7 +37,7 @@ class Course(models.Model):
     members = models.ManyToManyField(User, through = 'Enrollment',
         through_fields = ('course', 'user'))
 
-    def get_course_item_list(self):
+    def get_courseitem_list(self):
         """ Returns general items and headings, sorted """
         item_list = self.courseitem_set.all()
         heading_list = self.itemheading_set.all()
@@ -45,7 +45,7 @@ class Course(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse('course_item_list', args = [self.id])
+        return reverse('courseitem_list', args = [self.id])
 
     def __str__(self):
         return f"{self.id}:{self.code}"
@@ -140,7 +140,7 @@ class CourseItem(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('course_item_detail', kwargs={
+        return reverse('courseitem_detail', kwargs={
             'course_id': self.course.id,
             'item_id': self.id
         })
