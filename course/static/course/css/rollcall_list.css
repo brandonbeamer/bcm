@@ -1,0 +1,31 @@
+table.rollcall-list {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 40em;
+  margin: 0 auto;
+  margin-top: 2em;
+  text-align: left;
+}
+
+table.rollcall-list tr {
+  height: 2em;
+}
+
+table.rollcall-list tbody tr:hover {
+  background-color: var(--gray-highlight);
+}
+
+table.rollcall-list thead img {
+  width: 1.6em;
+  height: 1.6em;
+}
+
+table.rollcall-list tbody td {
+  vertical-align: middle;
+}
+
+.attendance-status {
+  width: 3em;
+  text-align: center;
+}

@@ -3,7 +3,7 @@ from django.forms import ModelForm, Form
 from django.forms.widgets import TextInput
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from .models import CourseItem, ItemHeading
+from .models import CourseItem, ItemHeading, Attendance
 
 # class OptionalCreateItemHeadingForm(ModelForm):
 #     def __init__(self, *args, **kwargs):
@@ -49,3 +49,12 @@ class IdVisibleForm(Form):
 
 class TextForm(Form):
     text = forms.CharField()
+
+class AttendanceForm(ModelForm):
+    class Meta:
+        model = Attendance
+        fields = ['user', 'status']
+        widgets = {
+            'user': forms.HiddenInput(),
+            'status': forms.RadioSelect(attrs = {'class': 'attendance-status'}),
+        }

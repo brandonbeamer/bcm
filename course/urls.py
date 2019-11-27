@@ -24,6 +24,7 @@ urlpatterns = [
 
     # ----- Views for Attendance
     path('<uuid:course_id>/attendance', views.RollCallListView.as_view(), name = 'rollcall_list'),
+    path('<uuid:course_id>/take_attendance', views.RollCallCreateView.as_view(), name = 'rollcall_create'),
 
     path('<uuid:course_id>/gradebook', views.GradebookView.as_view(), name = 'course_gradebook'),
     path('<uuid:course_id>/settings', views.CourseSettingsView.as_view(), name = 'course_settings'),

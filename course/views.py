@@ -4,19 +4,21 @@ from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse, reverse_lazy
 from django.db.models import Max
-from django.forms import formset_factory
+from django.forms import formset_factory, modelformset_factory
 import json
 import markdown
 import bleach
 
 # from json import dumps
 
-from .models import Course, Enrollment, CourseItem, ItemHeading
+from .models import Course, Enrollment, CourseItem, ItemHeading, RollCall, Attendance
 from .models import COURSEITEM_CONTENT_TYPE_MARKDOWN, COURSEITEM_CONTENT_TYPE_PLAINTEXT
-from .forms import CourseItemForm, ItemHeadingCreateInlineForm, ItemOrderUpdateInlineForm
+from .models import ATTENDANCE_PRESENT, ATTENDANCE_LATE, ATTENDANCE_ABSENT, ATTENDANCE_EXCUSED
+from .forms import CourseItemForm, ItemHeadingCreateInlineForm, ItemOrderUpdateInlineForm, AttendanceForm
 from .forms import ItemIdForm, IdVisibleForm, TextForm
 
 # User is member of course test
@@ -101,7 +103,7 @@ class CourseItemListView(EnrolledBaseView):
     template_name = "course/courseitem_list.html"
     def get_base_context(self, kwargs):
         return {
-            'page_name': 'courseitems',
+            'page_name': 'courseitem_list',
             'page_name_pretty': 'Materials',
         }
 
@@ -328,14 +330,56 @@ class CourseItemHeadingVisibleUpdateInlineView(InstructorBaseView):
         self.context.update({'item': object})
         return render(request, self.template_name, self.context)
 
+class RollCallCreateView(InstructorBaseView):
+    template_name = 'course/rollcall_create.html'
+    status_icon_srcs = {
+        'present': static('shared/icons/check_green.svg'),
+        'late': static('shared/icons/clock_orange.svg'),
+        'absent': static('shared/icons/clear_red.svg'),
+        'excused': static('shared/icons/block_gray.svg'),
+    }
+    def get_base_context(self):
+        return {
+            'page_name': 'rollcall_create',
+            'page_name_pretty': 'Take Attendance',
+        }
+
+    def get(self, request, **kwargs):
+        self.context.update(self.get_base_context())
+        AttendanceFormSet = formset_factory(AttendanceForm, extra = 0)
+        student_enrollments = Enrollment.objects.filter(course=self.course, role=Enrollment.STUDENT)
+        initial_data = [{'user': e.user, 'status': ATTENDANCE_ABSENT} for e in student_enrollments]
+        formset = AttendanceFormSet(initial = initial_data)
+        rows = ({
+                  'form': x[0],
+                  'user': x[1]['user'],
+                } for x in zip(formset, initial_data))
+        self.context['rows'] = rows
+        self.context.update({
+            'ATTENDANCE_PRESENT': ATTENDANCE_PRESENT,
+            'ATTENDANCE_LATE': ATTENDANCE_LATE,
+            'ATTENDANCE_ABSENT': ATTENDANCE_ABSENT,
+            'ATTENDANCE_EXCUSED': ATTENDANCE_EXCUSED,
+            'status_icon_srcs': self.status_icon_srcs,
+        })
+        # print(self.context['formset_users_zipped'])
+        return render(request, self.template_name, self.context)
+
 class RollCallListView(InstructorBaseView):
     template_name = 'course/rollcall_list.html'
     def get_base_context(self):
         return {
-            'page_name': 'attendance',
+            'page_name': 'rollcall_list',
             'page_name_pretty': 'Attendance'
         }
-    pass
+    def get(self, request, **kwargs):
+        object_list = RollCall.objects.filter(course = self.course)
+        self.context.update({
+            **self.get_base_context(),
+            'object_list': object_list
+        })
+        return render(request, self.template_name, self.context)
+
 
 class AssignmentListView(TemplateView):
     template_name = "course/courseitem_list.html"

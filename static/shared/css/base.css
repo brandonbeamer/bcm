@@ -6,6 +6,7 @@
 :root {
   --almost-white: #fefefe;
   --almost-black: #010101;
+  --gray-highlight: #00000008;
   --accent-color: #006644;
   --accent-hl: #007D53;  /* hl = highlight */
   --accent-ds: #2d4d43;  /* ds = desaturated, for backgrounds */
@@ -137,7 +138,7 @@ button, [type=button] {
   box-shadow: 0 -0.1em 0.1em var(--almost-black) inset;
 }
 
-button:hover:not(:disabled), [type=button]:hover:not(:disabled) {
+button:hover:not(:disabled):not(.accent), [type=button]:hover:not(:disabled):not(.accent) {
   background-color: var(--accent-shl);
 }
 

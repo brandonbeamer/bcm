@@ -72,25 +72,35 @@ class RollCall(models.Model):
     """ An instance of taking attendance """
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     taken_at = models.DateTimeField(default = timezone.now)
+
+    def get_counts(self):
+        records = self.attendance_set.all()
+        return {
+            'num_present': records.filter(status = ATTENDANCE_PRESENT).count(),
+            'num_late': records.filter(status = ATTENDANCE_LATE).count(),
+            'num_absent': records.filter(status = ATTENDANCE_ABSENT).count(),
+            'num_excused': records.filter(status = ATTENDANCE_EXCUSED).count(),
+        }
+
     def __str__(self):
         return f"{self.course} roll taken at {taken_at}"
     class Meta:
         ordering = ['-taken_at']
 
+ATTENDANCE_PRESENT = 'P'
+ATTENDANCE_ABSENT  = 'A'
+ATTENDANCE_LATE    = 'L'
+ATTENDANCE_EXCUSED = 'E'
 class Attendance(models.Model):
     """ Records whether a student was present/absent/etc. on a given date """
-    PRESENT = 'P'
-    ABSENT  = 'A'
-    LATE    = 'L'
-    EXCUSED = 'E'
     rollcall = models.ForeignKey(RollCall, on_delete = models.CASCADE)
     user   = models.ForeignKey(User, on_delete = models.CASCADE)
-    status = models.CharField(max_length = 1, default = LATE,
+    status = models.CharField(max_length = 1, default = ATTENDANCE_LATE,
         choices = (
-            (PRESENT, 'Present'),
-            (LATE, 'Late'),
-            (ABSENT, 'Absent'),
-            (EXCUSED, 'Excused'),
+            (ATTENDANCE_PRESENT, 'Present'),
+            (ATTENDANCE_LATE, 'Late'),
+            (ATTENDANCE_ABSENT, 'Absent'),
+            (ATTENDANCE_EXCUSED, 'Excused'),
         ))
     class Meta:
         ordering = ['user']

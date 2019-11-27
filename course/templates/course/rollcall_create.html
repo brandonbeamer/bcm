@@ -1,0 +1,63 @@
+{% extends 'course/course_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'course/css/course_base.css' %}"/>
+  <link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
+  <link rel="stylesheet" href="{% static 'course/css/rollcall_create.css' %}"/>
+{% endblock %}
+
+{% block main_content %}
+<h1>Take Attendance</h1>
+
+{% if rows %}
+
+  <form action="{% url 'rollcall_create' course_id=course.id %}" method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <table class="attendance">
+      <thead>
+        <tr>
+          <th class="attendance-name">Name</th>
+          <th class="attendance-status"></th>
+          <th class="attendance-status"></th>
+          <th class="attendance-status"></th>
+          <th class="attendance-status"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{row.user.username}}</td>
+            {% for rb in row.form.status %}
+              <td>
+                <label class='attendance-status'>
+                  {{rb.tag}}
+                  {% if rb.data.value == ATTENDANCE_PRESENT %}
+                    <img class="attendance-status" src="{{status_icon_srcs.present}}" title="present">
+                  {% elif rb.data.value == ATTENDANCE_LATE %}
+                    <img class="attendance-status" src="{{status_icon_srcs.late}}" title="late">
+                  {% elif rb.data.value == ATTENDANCE_ABSENT %}
+                    <img class="attendance-status" src="{{status_icon_srcs.absent}}" title="absent">
+                  {% elif rb.data.value == ATTENDANCE_EXCUSED %}
+                    <img class="attendance-status" src="{{status_icon_srcs.excused}}" title="excused">
+                  {% endif %}
+
+                </label>
+              </td>
+            {% endfor %}
+            <!-- <td></td>
+            <td></td>
+            <td></td> -->
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+
+{% else %}
+  <p>This course doesn't have any students so&hellip; perfect attendance yay!</p>
+{% endif %}
+
+{% endblock %}

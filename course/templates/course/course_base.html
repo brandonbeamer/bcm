@@ -6,7 +6,7 @@
 
 
 {% block navbar_items %}
-  {% if page_name == 'course_items' %}
+  {% if page_name == 'courseitem_list' %}
     <div>Materials</div>
   {% else %}
     <a href="{% url 'courseitem_list' course_id=course.id %}">Materials</a>
@@ -18,11 +18,24 @@
     <a href="{% url 'course_assignment_list' course_id=course.id %}">Assignments</a>
   {% endif %}
 
+  {% if page_name == 'rollcall_list' %}
+    <div>Attendance</div>
+  {% else %}
+    <a href="{% url 'rollcall_list' course_id=course.id %}">Attendance</a>
+  {% endif %}
+
   {% if page_name == 'course_gradebook' %}
     <div>Gradebook</div>
   {% else %}
     <a href="{% url 'course_gradebook' course_id=course.id %}">Gradebook</a>
   {% endif %}
+
+  {% if page_name == 'roster' %}
+    <div>Roster</div>
+  {% else %}
+    <a href="{% url 'course_gradebook' course_id=course.id %}">Roster</a>
+  {% endif %}
+
 
   {% if page_name == 'course_settings' %}
     <div>Course Settings</div>
@@ -32,7 +45,7 @@
 {% endblock %}
 
 {% block navbar_drawer_items %}
-  {% if page_name != 'course_items' %}
+  {% if page_name != 'courseitem_list' %}
     <a href="{% url 'courseitem_list' course_id=course.id %}">Materials</a>
   {% endif %}
 
@@ -40,9 +53,18 @@
     <a href="{% url 'course_assignment_list' course_id=course.id %}">Assignments</a>
   {% endif %}
 
+  {% if page_name != 'rollcall_list' %}
+    <a href="{% url 'rollcall_list' course_id=course.id %}">Attendance</a>
+  {% endif %}
+
   {% if page_name != 'course_gradebook' %}
     <a href="{% url 'course_gradebook' course_id=course.id %}">Gradebook</a>
   {% endif %}
+
+  {% if page_name != 'roster' %}
+    <a href="{% url 'course_gradebook' course_id=course.id %}">Roster</a>
+  {% endif %}
+
 
   {% if page_name != 'course_settings' %}
     <a href="{% url 'course_settings' course_id=course.id %}">Course Settings</a>

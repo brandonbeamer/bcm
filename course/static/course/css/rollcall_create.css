@@ -1,0 +1,49 @@
+table.attendance {
+  table-layout: fixed;
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+table.attendance th {
+  text-align: left;
+}
+
+table.attendance th.attendance-status {
+  width: 2em;
+}
+
+table.attendance td {
+  vertical-align: middle;
+  text-align: left;
+  padding: 0.2em;
+}
+
+table.attendance tbody td label {
+  margin: 0;
+}
+
+table.attendance tbody tr:hover {
+  background-color: var(--gray-highlight);
+}
+
+input[type=radio].attendance-status {
+  width: 0;
+  height: 0;
+  opacity: 0%;
+  display: none;
+}
+
+input[type=radio].attendance-status ~ img {
+  width: 2em;
+  height: 2em;
+  opacity: 20%;
+  filter: grayscale(100%);
+}
+
+input[type=radio].attendance-status:checked ~ img {
+  width: 2em;
+  height: 2em;
+  opacity: 100%;
+  filter: grayscale(0%);
+}

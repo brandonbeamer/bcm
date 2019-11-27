@@ -2,9 +2,106 @@
 {% load static %}
 
 {% block head %}
-
+  <link rel="stylesheet" href="{% static 'course/css/course_base.css' %}"/>
+  <link rel="stylesheet" href="{% static 'shared/css/appview_simple.css' %}"/>
+  <link rel="stylesheet" href="{% static 'course/css/rollcall_list.css' %}"/>
 {% endblock %}
 
 {% block main_content %}
   <h1>Attendance Records</h1>
+    <div class="align-right">
+      <button type="button" class='accent' onclick="window.location.href='{% url 'rollcall_create' course_id=course.id %}'">
+        <img class='icon' src="{% static 'shared/icons/check_white.svg' %}" alt="plus sign"/>
+        Take Attendance
+      </button>
+    </div>
+
+
+  <table class="rollcall-list">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th class="attendance-status"><img src="{% static 'shared/icons/check_green.svg' %}" alt="checkmark"></th>
+        <th class="attendance-status"><img src="{% static 'shared/icons/clock_orange.svg' %}" alt="checkmark"></th>
+        <th class="attendance-status"><img src="{% static 'shared/icons/clear_red.svg' %}" alt="checkmark"></th>
+        <th class="attendance-status"><img src="{% static 'shared/icons/block_gray.svg' %}" alt="checkmark"></th>
+        <th class="attendance-status"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{% now 'DATETIME_FORMAT'%}</td>
+        <td class="attendance-status">15</td>
+        <td class="attendance-status">4</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status"><img class="icon clickable" src="{% static 'shared/icons/more_vert.svg' %}" alt="popup menu icon"></td>
+      </tr>
+      <tr>
+        <td>{% now 'DATETIME_FORMAT'%}</td>
+        <td class="attendance-status">15</td>
+        <td class="attendance-status">4</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status"><img class="icon clickable" src="{% static 'shared/icons/more_vert.svg' %}" alt="popup menu icon"></td>
+      </tr>
+      <tr>
+        <td>{% now 'DATETIME_FORMAT'%}</td>
+        <td class="attendance-status">15</td>
+        <td class="attendance-status">4</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status"><img class="icon clickable" src="{% static 'shared/icons/more_vert.svg' %}" alt="popup menu icon"></td>
+      </tr>
+      <tr>
+        <td>{% now 'DATETIME_FORMAT'%}</td>
+        <td class="attendance-status">15</td>
+        <td class="attendance-status">4</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status"><img class="icon clickable" src="{% static 'shared/icons/more_vert.svg' %}" alt="popup menu icon"></td>
+      </tr>
+      <tr>
+        <td>{% now 'DATETIME_FORMAT'%}</td>
+        <td class="attendance-status">15</td>
+        <td class="attendance-status">4</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status"><img class="icon clickable" src="{% static 'shared/icons/more_vert.svg' %}" alt="popup menu icon"></td>
+      </tr>
+      <tr>
+        <td>{% now 'DATETIME_FORMAT'%}</td>
+        <td class="attendance-status">15</td>
+        <td class="attendance-status">4</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status"><img class="icon clickable" src="{% static 'shared/icons/more_vert.svg' %}" alt="popup menu icon"></td>
+      </tr>
+      <tr>
+        <td>{% now 'DATETIME_FORMAT'%}</td>
+        <td class="attendance-status">15</td>
+        <td class="attendance-status">4</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status"><img class="icon clickable" src="{% static 'shared/icons/more_vert.svg' %}" alt="popup menu icon"></td>
+      </tr>
+      <tr>
+        <td>{% now 'DATETIME_FORMAT'%}</td>
+        <td class="attendance-status">15</td>
+        <td class="attendance-status">4</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status"><img class="icon clickable" src="{% static 'shared/icons/more_vert.svg' %}" alt="popup menu icon"></td>
+      </tr>
+      <tr>
+        <td>{% now 'DATETIME_FORMAT'%}</td>
+        <td class="attendance-status">15</td>
+        <td class="attendance-status">4</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status">1</td>
+        <td class="attendance-status"><img class="icon clickable" src="{% static 'shared/icons/more_vert.svg' %}" alt="popup menu icon"></td>
+      </tr>
+    </tbody>
+  </table>
+
 {% endblock %}
